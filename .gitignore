@@ -1,0 +1,21 @@
+.DS_Store
+.venv/
+__pycache__/
+*.pyc
+
+# Unrelated local examples
+hw7.py
+exercise_2.py
+
+# Local course materials / data files
+slides/
+Project (1).pdf
+data.csv
+data1.csv
+data2.csv
+data3.csv
+data4.csv
+
+# Generated outputs
+results/*.json
+results/gurobi_artifacts/
