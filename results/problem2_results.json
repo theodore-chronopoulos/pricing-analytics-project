@@ -1,0 +1,765 @@
+{
+  "problem": 2,
+  "model_source": "results/problem1_results.json",
+  "seed": 5132,
+  "raw_scale_coefficients": {
+    "intercept": -2.815324976338604,
+    "prop_starrating": 0.4761238772134337,
+    "prop_review_score": 0.1198971101959855,
+    "prop_brand_bool": 0.22992269948768013,
+    "prop_location_score": 0.016338173306882708,
+    "prop_accesibility_score": 0.5628726700509642,
+    "prop_log_historical_price": -0.037367603017286886,
+    "price_usd": -0.007323071607216904,
+    "promotion_flag": 0.45402977040295234
+  },
+  "results": {
+    "data1.csv": {
+      "selected_indices_1_based": [
+        24,
+        22,
+        5,
+        1,
+        20,
+        23,
+        3,
+        6,
+        2,
+        7,
+        16,
+        4,
+        19,
+        21,
+        18,
+        25,
+        27,
+        13
+      ],
+      "expected_revenue": 107.35311699412645,
+      "selected_count": 18,
+      "price_ranked_hotels": [
+        {
+          "index_1_based": 24,
+          "price": 158.0,
+          "utility": -1.606212725610999,
+          "weight": 0.2006460786667884
+        },
+        {
+          "index_1_based": 22,
+          "price": 156.0,
+          "utility": -1.399011485926172,
+          "weight": 0.24684084903308912
+        },
+        {
+          "index_1_based": 5,
+          "price": 154.0,
+          "utility": -1.872136136828533,
+          "weight": 0.15379478397407195
+        },
+        {
+          "index_1_based": 1,
+          "price": 150.0,
+          "utility": -1.962740960595651,
+          "weight": 0.14047286218177815
+        },
+        {
+          "index_1_based": 20,
+          "price": 147.0,
+          "utility": -0.9616035782369661,
+          "weight": 0.3822793793105085
+        },
+        {
+          "index_1_based": 23,
+          "price": 147.0,
+          "utility": -0.9616035782369661,
+          "weight": 0.3822793793105085
+        },
+        {
+          "index_1_based": 3,
+          "price": 145.0,
+          "utility": -1.7898903190566984,
+          "weight": 0.16697848302023816
+        },
+        {
+          "index_1_based": 6,
+          "price": 144.0,
+          "utility": -1.7825672474494814,
+          "weight": 0.16820576666661013
+        },
+        {
+          "index_1_based": 2,
+          "price": 140.0,
+          "utility": -1.7532749610206138,
+          "weight": 0.17320577143766516
+        },
+        {
+          "index_1_based": 7,
+          "price": 131.0,
+          "utility": -1.7909262534447645,
+          "weight": 0.1668055938339985
+        },
+        {
+          "index_1_based": 16,
+          "price": 131.0,
+          "utility": -1.8072644267516473,
+          "weight": 0.16410243758156637
+        },
+        {
+          "index_1_based": 4,
+          "price": 125.0,
+          "utility": -1.1836431830058092,
+          "weight": 0.30616130267036634
+        },
+        {
+          "index_1_based": 19,
+          "price": 121.0,
+          "utility": -1.8539308208754637,
+          "weight": 0.1566203083512351
+        },
+        {
+          "index_1_based": 21,
+          "price": 121.0,
+          "utility": -2.0511771737493785,
+          "weight": 0.12858344940010855
+        },
+        {
+          "index_1_based": 18,
+          "price": 120.0,
+          "utility": -1.6068135288762757,
+          "weight": 0.20052556605337132
+        },
+        {
+          "index_1_based": 25,
+          "price": 118.0,
+          "utility": -1.5594910390480765,
+          "weight": 0.21024304947716993
+        },
+        {
+          "index_1_based": 27,
+          "price": 112.0,
+          "utility": -1.0394287321913414,
+          "weight": 0.35365665692580844
+        },
+        {
+          "index_1_based": 13,
+          "price": 108.0,
+          "utility": -2.3285421831798896,
+          "weight": 0.09743768990433813
+        },
+        {
+          "index_1_based": 10,
+          "price": 107.0,
+          "utility": -2.22753169558786,
+          "weight": 0.1077941708639161
+        },
+        {
+          "index_1_based": 15,
+          "price": 107.0,
+          "utility": -1.9503698721786025,
+          "weight": 0.14222145809643014
+        },
+        {
+          "index_1_based": 17,
+          "price": 105.0,
+          "utility": -2.3229111416651214,
+          "weight": 0.09798791329276223
+        },
+        {
+          "index_1_based": 26,
+          "price": 99.0,
+          "utility": -1.4203526785109553,
+          "weight": 0.24162878458816553
+        },
+        {
+          "index_1_based": 11,
+          "price": 95.0,
+          "utility": -1.4073985653889702,
+          "weight": 0.24477923277231053
+        },
+        {
+          "index_1_based": 12,
+          "price": 95.0,
+          "utility": -2.0034195527983893,
+          "weight": 0.13487328744978241
+        },
+        {
+          "index_1_based": 8,
+          "price": 91.0,
+          "utility": -1.9741272663695217,
+          "weight": 0.13888246676688282
+        },
+        {
+          "index_1_based": 9,
+          "price": 77.0,
+          "utility": -2.2377622468590332,
+          "weight": 0.1066969989783066
+        },
+        {
+          "index_1_based": 14,
+          "price": 75.0,
+          "utility": -2.075722911335618,
+          "weight": 0.12546569412854305
+        }
+      ],
+      "dataset_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data1.csv"
+    },
+    "data2.csv": {
+      "selected_indices_1_based": [
+        1,
+        9,
+        8,
+        2,
+        22,
+        7,
+        11,
+        10,
+        24,
+        26
+      ],
+      "expected_revenue": 131.1136297861905,
+      "selected_count": 10,
+      "price_ranked_hotels": [
+        {
+          "index_1_based": 1,
+          "price": 233.0,
+          "utility": -1.229882157750953,
+          "weight": 0.2923270241251764
+        },
+        {
+          "index_1_based": 9,
+          "price": 212.0,
+          "utility": -0.6220678835964462,
+          "weight": 0.5368331804875358
+        },
+        {
+          "index_1_based": 8,
+          "price": 206.0,
+          "utility": -1.0321592243560969,
+          "weight": 0.3562369340737435
+        },
+        {
+          "index_1_based": 2,
+          "price": 161.0,
+          "utility": -1.17874487924477,
+          "weight": 0.3076646526572995
+        },
+        {
+          "index_1_based": 22,
+          "price": 147.0,
+          "utility": -0.8300206990179797,
+          "weight": 0.43604026062292983
+        },
+        {
+          "index_1_based": 7,
+          "price": 146.0,
+          "utility": -1.068898805136516,
+          "weight": 0.34338644468381047
+        },
+        {
+          "index_1_based": 11,
+          "price": 143.0,
+          "utility": -1.0469295903148654,
+          "weight": 0.35101385255903866
+        },
+        {
+          "index_1_based": 10,
+          "price": 137.0,
+          "utility": -0.5268672834581306,
+          "weight": 0.5904517934808506
+        },
+        {
+          "index_1_based": 24,
+          "price": 134.0,
+          "utility": -0.8768119851306266,
+          "weight": 0.41610735582365144
+        },
+        {
+          "index_1_based": 26,
+          "price": 133.0,
+          "utility": -0.4975749970292629,
+          "weight": 0.6080032832007826
+        },
+        {
+          "index_1_based": 5,
+          "price": 125.0,
+          "utility": -0.9151143013849612,
+          "weight": 0.4004708491019931
+        },
+        {
+          "index_1_based": 3,
+          "price": 123.0,
+          "utility": -0.5442413911530793,
+          "weight": 0.5802818233345156
+        },
+        {
+          "index_1_based": 14,
+          "price": 123.0,
+          "utility": -0.6763610872552552,
+          "weight": 0.5084638856996607
+        },
+        {
+          "index_1_based": 23,
+          "price": 123.0,
+          "utility": -1.020365268366513,
+          "weight": 0.36046325030084486
+        },
+        {
+          "index_1_based": 4,
+          "price": 118.0,
+          "utility": -0.737548732604675,
+          "weight": 0.47828488389797436
+        },
+        {
+          "index_1_based": 28,
+          "price": 117.0,
+          "utility": -0.856529728527226,
+          "weight": 0.42463312059517777
+        },
+        {
+          "index_1_based": 12,
+          "price": 110.0,
+          "utility": -0.9251653374726931,
+          "weight": 0.39646586299190745
+        },
+        {
+          "index_1_based": 21,
+          "price": 105.0,
+          "utility": -1.1184726789242887,
+          "weight": 0.3267785093817805
+        },
+        {
+          "index_1_based": 13,
+          "price": 104.0,
+          "utility": -0.8812269078293917,
+          "weight": 0.41427432333904934
+        },
+        {
+          "index_1_based": 6,
+          "price": 102.0,
+          "utility": -0.8665807646149579,
+          "weight": 0.4203864950201091
+        },
+        {
+          "index_1_based": 20,
+          "price": 98.0,
+          "utility": -0.7173913679901048,
+          "weight": 0.4880236710818558
+        },
+        {
+          "index_1_based": 29,
+          "price": 90.0,
+          "utility": -1.1285237150120206,
+          "weight": 0.32351049775475893
+        },
+        {
+          "index_1_based": 27,
+          "price": 89.0,
+          "utility": -0.7713808337211381,
+          "weight": 0.46237416546399074
+        },
+        {
+          "index_1_based": 15,
+          "price": 86.0,
+          "utility": -1.5753553057965868,
+          "weight": 0.20693401476274575
+        },
+        {
+          "index_1_based": 17,
+          "price": 84.0,
+          "utility": -1.5607091625821528,
+          "weight": 0.20998710338935062
+        },
+        {
+          "index_1_based": 18,
+          "price": 84.0,
+          "utility": -0.9646881751727336,
+          "weight": 0.38110201828411067
+        },
+        {
+          "index_1_based": 19,
+          "price": 73.0,
+          "utility": -0.6542116880056676,
+          "weight": 0.5198517064377127
+        },
+        {
+          "index_1_based": 25,
+          "price": 73.0,
+          "utility": -0.6705498613125503,
+          "weight": 0.5114272863790361
+        },
+        {
+          "index_1_based": 16,
+          "price": 69.0,
+          "utility": -1.330965978277914,
+          "weight": 0.2642219053644059
+        }
+      ],
+      "dataset_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data2.csv"
+    },
+    "data3.csv": {
+      "selected_indices_1_based": [
+        24,
+        8,
+        2,
+        6,
+        5,
+        20,
+        16,
+        14,
+        17,
+        15,
+        3,
+        4,
+        1,
+        11,
+        25,
+        12,
+        9,
+        19
+      ],
+      "expected_revenue": 121.05480009279174,
+      "selected_count": 18,
+      "price_ranked_hotels": [
+        {
+          "index_1_based": 24,
+          "price": 603.0,
+          "utility": -5.669834152940407,
+          "weight": 0.0034484371418408563
+        },
+        {
+          "index_1_based": 8,
+          "price": 281.0,
+          "utility": -2.3969249440069835,
+          "weight": 0.09099734542842478
+        },
+        {
+          "index_1_based": 2,
+          "price": 211.0,
+          "utility": -2.256874871826131,
+          "weight": 0.1046771034915124
+        },
+        {
+          "index_1_based": 6,
+          "price": 195.0,
+          "utility": -1.6472436755903443,
+          "weight": 0.19257999067521014
+        },
+        {
+          "index_1_based": 5,
+          "price": 191.0,
+          "utility": -1.754186672664345,
+          "weight": 0.17304792968310018
+        },
+        {
+          "index_1_based": 20,
+          "price": 190.0,
+          "utility": -2.103090368074576,
+          "weight": 0.12207857696707614
+        },
+        {
+          "index_1_based": 16,
+          "price": 181.0,
+          "utility": -2.0371827236096243,
+          "weight": 0.130395554202535
+        },
+        {
+          "index_1_based": 14,
+          "price": 180.0,
+          "utility": -2.029859652002407,
+          "weight": 0.13135395511945433
+        },
+        {
+          "index_1_based": 17,
+          "price": 171.0,
+          "utility": -1.6077252405200069,
+          "weight": 0.20034282787485516
+        },
+        {
+          "index_1_based": 15,
+          "price": 153.0,
+          "utility": -1.0055420078802677,
+          "weight": 0.3658462894846406
+        },
+        {
+          "index_1_based": 3,
+          "price": 150.0,
+          "utility": -1.437602563461569,
+          "weight": 0.23749645938728633
+        },
+        {
+          "index_1_based": 4,
+          "price": 144.0,
+          "utility": -1.5135612440142532,
+          "weight": 0.2201246628021102
+        },
+        {
+          "index_1_based": 1,
+          "price": 140.0,
+          "utility": -1.5006071308922682,
+          "weight": 0.2229947320506579
+        },
+        {
+          "index_1_based": 11,
+          "price": 138.0,
+          "utility": -1.8421877546952827,
+          "weight": 0.15847035233183548
+        },
+        {
+          "index_1_based": 25,
+          "price": 138.0,
+          "utility": -1.978423038198151,
+          "weight": 0.13828713899029837
+        },
+        {
+          "index_1_based": 12,
+          "price": 129.0,
+          "utility": -1.896177220426316,
+          "weight": 0.15014148135025002
+        },
+        {
+          "index_1_based": 9,
+          "price": 128.0,
+          "utility": -2.311272249708363,
+          "weight": 0.09913504676032983
+        },
+        {
+          "index_1_based": 19,
+          "price": 123.0,
+          "utility": -1.7160035072801465,
+          "weight": 0.1797832163930617
+        },
+        {
+          "index_1_based": 26,
+          "price": 120.0,
+          "utility": -1.9665048594642323,
+          "weight": 0.13994513032244832
+        },
+        {
+          "index_1_based": 7,
+          "price": 115.0,
+          "utility": -1.301192167404963,
+          "weight": 0.2722070831062955
+        },
+        {
+          "index_1_based": 22,
+          "price": 115.0,
+          "utility": -2.25343992183183,
+          "weight": 0.10503728235159847
+        },
+        {
+          "index_1_based": 18,
+          "price": 105.0,
+          "utility": -1.7040853285462276,
+          "weight": 0.1819387242488331
+        },
+        {
+          "index_1_based": 23,
+          "price": 105.0,
+          "utility": -2.1965473790665437,
+          "weight": 0.1111863808466881
+        },
+        {
+          "index_1_based": 10,
+          "price": 101.0,
+          "utility": -2.129887489620389,
+          "weight": 0.11885066503363713
+        },
+        {
+          "index_1_based": 13,
+          "price": 101.0,
+          "utility": -1.9210539149119228,
+          "weight": 0.14645253225903562
+        },
+        {
+          "index_1_based": 21,
+          "price": 101.0,
+          "utility": -2.167255092637676,
+          "weight": 0.11449145442250468
+        }
+      ],
+      "dataset_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data3.csv"
+    },
+    "data4.csv": {
+      "selected_indices_1_based": [
+        5,
+        4,
+        21,
+        22,
+        20,
+        27,
+        16,
+        7,
+        11,
+        19,
+        9
+      ],
+      "expected_revenue": 97.40889119818694,
+      "selected_count": 11,
+      "price_ranked_hotels": [
+        {
+          "index_1_based": 5,
+          "price": 195.0,
+          "utility": -1.2526367628955204,
+          "weight": 0.2857503467326027
+        },
+        {
+          "index_1_based": 4,
+          "price": 152.0,
+          "utility": -0.8277190944934989,
+          "weight": 0.4370450086824306
+        },
+        {
+          "index_1_based": 21,
+          "price": 140.0,
+          "utility": -1.1060002181974444,
+          "weight": 0.3308797647128652
+        },
+        {
+          "index_1_based": 22,
+          "price": 114.0,
+          "utility": -0.669339483615242,
+          "weight": 0.5120466813355663
+        },
+        {
+          "index_1_based": 20,
+          "price": 112.0,
+          "utility": -0.5511344035117054,
+          "weight": 0.5762956875792624
+        },
+        {
+          "index_1_based": 27,
+          "price": 110.0,
+          "utility": -1.450303734606775,
+          "weight": 0.23449905179859407
+        },
+        {
+          "index_1_based": 16,
+          "price": 106.0,
+          "utility": -1.3337906845956873,
+          "weight": 0.26347660919598437
+        },
+        {
+          "index_1_based": 7,
+          "price": 105.0,
+          "utility": -0.8013292158543885,
+          "weight": 0.44873210569899535
+        },
+        {
+          "index_1_based": 11,
+          "price": 105.0,
+          "utility": -0.921226326050374,
+          "weight": 0.39803062634193287
+        },
+        {
+          "index_1_based": 19,
+          "price": 105.0,
+          "utility": -1.4300265498775733,
+          "weight": 0.23930256870550998
+        },
+        {
+          "index_1_based": 9,
+          "price": 100.0,
+          "utility": -0.764713857818304,
+          "weight": 0.4654671016925108
+        },
+        {
+          "index_1_based": 3,
+          "price": 92.0,
+          "utility": -0.48202221404529655,
+          "weight": 0.6175333436986447
+        },
+        {
+          "index_1_based": 24,
+          "price": 86.0,
+          "utility": -0.9183232490161211,
+          "weight": 0.39918781880891213
+        },
+        {
+          "index_1_based": 8,
+          "price": 85.0,
+          "utility": -0.6712059570169331,
+          "weight": 0.5110918511841666
+        },
+        {
+          "index_1_based": 10,
+          "price": 82.0,
+          "utility": -1.228919556297819,
+          "weight": 0.2926085540221948
+        },
+        {
+          "index_1_based": 1,
+          "price": 71.0,
+          "utility": -0.3282377102937416,
+          "weight": 0.7201918023511567
+        },
+        {
+          "index_1_based": 13,
+          "price": 68.0,
+          "utility": -1.3563192532844623,
+          "weight": 0.2576072210072291
+        },
+        {
+          "index_1_based": 15,
+          "price": 64.0,
+          "utility": -1.3597033134693604,
+          "weight": 0.25673693604615133
+        },
+        {
+          "index_1_based": 14,
+          "price": 56.0,
+          "utility": -1.0548578678170624,
+          "weight": 0.34824192017315425
+        },
+        {
+          "index_1_based": 17,
+          "price": 52.0,
+          "utility": -1.3753853910718603,
+          "weight": 0.25274217245616076
+        },
+        {
+          "index_1_based": 23,
+          "price": 51.0,
+          "utility": -1.0182425097809777,
+          "weight": 0.36122923947760605
+        },
+        {
+          "index_1_based": 26,
+          "price": 50.0,
+          "utility": -1.0109194381737607,
+          "weight": 0.36388425664019775
+        },
+        {
+          "index_1_based": 12,
+          "price": 49.0,
+          "utility": -0.6531255330526942,
+          "weight": 0.5204166526975205
+        },
+        {
+          "index_1_based": 25,
+          "price": 48.0,
+          "utility": -1.1062988842510215,
+          "weight": 0.3307809569153318
+        },
+        {
+          "index_1_based": 2,
+          "price": 45.0,
+          "utility": -1.1878886063184737,
+          "weight": 0.3048642735055966
+        },
+        {
+          "index_1_based": 6,
+          "price": 45.0,
+          "utility": -0.8537559461115067,
+          "weight": 0.42581259552540024
+        },
+        {
+          "index_1_based": 18,
+          "price": 40.0,
+          "utility": -0.9376887221015917,
+          "weight": 0.3915317290132179
+        }
+      ],
+      "dataset_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data4.csv"
+    }
+  }
+}

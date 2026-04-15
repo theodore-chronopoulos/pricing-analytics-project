@@ -1,0 +1,291 @@
+{
+  "problem": 4,
+  "data_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data.csv",
+  "seed": 5132,
+  "customer_type_definition": {
+    "type_1": "early",
+    "type_2": "late",
+    "late_if_booking_window_lt_days": 7.0
+  },
+  "theta_estimates": {
+    "theta_early": 0.5430931290399809,
+    "theta_late": 0.45690687096001914,
+    "threshold_days": 7.0
+  },
+  "shared_scaling_stats": {
+    "prop_starrating": {
+      "mean": 3.157402505734957,
+      "std": 0.8571822862649964,
+      "scaled": true
+    },
+    "prop_review_score": {
+      "mean": 3.9876804632407246,
+      "std": 0.9071191629160898,
+      "scaled": true
+    },
+    "prop_brand_bool": {
+      "mean": 0.7357279637145527,
+      "std": 1.0,
+      "scaled": false
+    },
+    "prop_location_score": {
+      "mean": 2.6171728460417363,
+      "std": 1.3481508978402195,
+      "scaled": true
+    },
+    "prop_accesibility_score": {
+      "mean": 0.005993111516316034,
+      "std": 0.07718286163824864,
+      "scaled": true
+    },
+    "prop_log_historical_price": {
+      "mean": 4.27631054382422,
+      "std": 1.7895033851701303,
+      "scaled": true
+    },
+    "price_usd": {
+      "mean": 141.19362259736354,
+      "std": 181.76934987695918,
+      "scaled": true
+    },
+    "promotion_flag": {
+      "mean": 0.14480847531844532,
+      "std": 1.0,
+      "scaled": false
+    }
+  },
+  "early_model": {
+    "dataset_summary": {
+      "queries": 4537,
+      "alternatives": 83863,
+      "avg_alternatives_per_query": 18.484240687679083,
+      "chosen_queries": 3047,
+      "no_purchase_queries": 1490
+    },
+    "normalized_coefficients": {
+      "intercept": -2.127185149940527,
+      "prop_starrating": 0.37905787058714085,
+      "prop_review_score": 0.12461370294081031,
+      "prop_brand_bool": 0.2088711693874078,
+      "prop_location_score": -0.02149129554965497,
+      "prop_accesibility_score": 0.05785730704243931,
+      "prop_log_historical_price": -0.09495723971382579,
+      "price_usd": -1.0715970170471867,
+      "promotion_flag": 0.38289762372869807
+    },
+    "raw_scale_coefficients": {
+      "intercept": -2.974699262507925,
+      "prop_starrating": 0.44221384023089316,
+      "prop_review_score": 0.13737302444390903,
+      "prop_brand_bool": 0.2088711693874078,
+      "prop_location_score": -0.015941313086008924,
+      "prop_accesibility_score": 0.7496133962175823,
+      "prop_log_historical_price": -0.05306345911427158,
+      "price_usd": -0.005895366945926568,
+      "promotion_flag": 0.38289762372869807
+    },
+    "fit_summary": {
+      "final_log_likelihood": -11052.58713399642,
+      "average_log_likelihood_per_query": -2.436100316067097,
+      "final_gradient_norm": 3.213297911513674e-09,
+      "iterations_recorded": 6
+    },
+    "history": [
+      {
+        "iteration": 1,
+        "log_likelihood": -12479.627794473441,
+        "gradient_norm": 1387.3816360579178
+      },
+      {
+        "iteration": 2,
+        "log_likelihood": -12041.08514478338,
+        "gradient_norm": 1737.962015982266
+      },
+      {
+        "iteration": 3,
+        "log_likelihood": -11054.071526802654,
+        "gradient_norm": 87.82871358406862
+      },
+      {
+        "iteration": 4,
+        "log_likelihood": -11052.587557725385,
+        "gradient_norm": 2.224967000146909
+      },
+      {
+        "iteration": 5,
+        "log_likelihood": -11052.587133996836,
+        "gradient_norm": 0.0025076743188680154
+      },
+      {
+        "iteration": 6,
+        "log_likelihood": -11052.58713399642,
+        "gradient_norm": 3.213297911513674e-09
+      }
+    ]
+  },
+  "late_model": {
+    "dataset_summary": {
+      "queries": 3817,
+      "alternatives": 69146,
+      "avg_alternatives_per_query": 18.11527377521614,
+      "chosen_queries": 2801,
+      "no_purchase_queries": 1016
+    },
+    "normalized_coefficients": {
+      "intercept": -1.8079539184547704,
+      "prop_starrating": 0.46275854338965844,
+      "prop_review_score": 0.09558649746303419,
+      "prop_brand_bool": 0.2560532950471494,
+      "prop_location_score": 0.08727886308275519,
+      "prop_accesibility_score": 0.025560220321888004,
+      "prop_log_historical_price": -0.03198012816667072,
+      "price_usd": -1.6969329938760058,
+      "promotion_flag": 0.551683142203131
+    },
+    "raw_scale_coefficients": {
+      "intercept": -2.7095715288111237,
+      "prop_starrating": 0.5398601333749418,
+      "prop_review_score": 0.10537369440609658,
+      "prop_brand_bool": 0.2560532950471494,
+      "prop_location_score": 0.06473968397942596,
+      "prop_accesibility_score": 0.3311644551569906,
+      "prop_log_historical_price": -0.017870951478323318,
+      "price_usd": -0.009335638791824202,
+      "promotion_flag": 0.551683142203131
+    },
+    "fit_summary": {
+      "final_log_likelihood": -9505.447784870155,
+      "average_log_likelihood_per_query": -2.4902928438224143,
+      "final_gradient_norm": 1.235916052975819e-09,
+      "iterations_recorded": 6
+    },
+    "history": [
+      {
+        "iteration": 1,
+        "log_likelihood": -10376.578569117188,
+        "gradient_norm": 951.055810986067
+      },
+      {
+        "iteration": 2,
+        "log_likelihood": -9798.942803209644,
+        "gradient_norm": 747.7648930349842
+      },
+      {
+        "iteration": 3,
+        "log_likelihood": -9509.352323579236,
+        "gradient_norm": 70.28757778025852
+      },
+      {
+        "iteration": 4,
+        "log_likelihood": -9505.449999903729,
+        "gradient_norm": 1.2783134745375402
+      },
+      {
+        "iteration": 5,
+        "log_likelihood": -9505.447784872069,
+        "gradient_norm": 0.001035649210614361
+      },
+      {
+        "iteration": 6,
+        "log_likelihood": -9505.447784870155,
+        "gradient_norm": 1.235916052975819e-09
+      }
+    ]
+  },
+  "coefficient_comparison": {
+    "normalized_coefficients": {
+      "intercept": {
+        "early": -2.127185149940527,
+        "late": -1.8079539184547704,
+        "early_minus_late": -0.3192312314857566
+      },
+      "prop_starrating": {
+        "early": 0.37905787058714085,
+        "late": 0.46275854338965844,
+        "early_minus_late": -0.08370067280251758
+      },
+      "prop_review_score": {
+        "early": 0.12461370294081031,
+        "late": 0.09558649746303419,
+        "early_minus_late": 0.029027205477776125
+      },
+      "prop_brand_bool": {
+        "early": 0.2088711693874078,
+        "late": 0.2560532950471494,
+        "early_minus_late": -0.047182125659741614
+      },
+      "prop_location_score": {
+        "early": -0.02149129554965497,
+        "late": 0.08727886308275519,
+        "early_minus_late": -0.10877015863241016
+      },
+      "prop_accesibility_score": {
+        "early": 0.05785730704243931,
+        "late": 0.025560220321888004,
+        "early_minus_late": 0.03229708672055131
+      },
+      "prop_log_historical_price": {
+        "early": -0.09495723971382579,
+        "late": -0.03198012816667072,
+        "early_minus_late": -0.06297711154715507
+      },
+      "price_usd": {
+        "early": -1.0715970170471867,
+        "late": -1.6969329938760058,
+        "early_minus_late": 0.6253359768288191
+      },
+      "promotion_flag": {
+        "early": 0.38289762372869807,
+        "late": 0.551683142203131,
+        "early_minus_late": -0.1687855184744329
+      }
+    },
+    "raw_scale_coefficients": {
+      "intercept": {
+        "early": -2.974699262507925,
+        "late": -2.7095715288111237,
+        "early_minus_late": -0.2651277336968012
+      },
+      "prop_starrating": {
+        "early": 0.44221384023089316,
+        "late": 0.5398601333749418,
+        "early_minus_late": -0.0976462931440486
+      },
+      "prop_review_score": {
+        "early": 0.13737302444390903,
+        "late": 0.10537369440609658,
+        "early_minus_late": 0.031999330037812454
+      },
+      "prop_brand_bool": {
+        "early": 0.2088711693874078,
+        "late": 0.2560532950471494,
+        "early_minus_late": -0.047182125659741614
+      },
+      "prop_location_score": {
+        "early": -0.015941313086008924,
+        "late": 0.06473968397942596,
+        "early_minus_late": -0.08068099706543488
+      },
+      "prop_accesibility_score": {
+        "early": 0.7496133962175823,
+        "late": 0.3311644551569906,
+        "early_minus_late": 0.41844894106059166
+      },
+      "prop_log_historical_price": {
+        "early": -0.05306345911427158,
+        "late": -0.017870951478323318,
+        "early_minus_late": -0.035192507635948264
+      },
+      "price_usd": {
+        "early": -0.005895366945926568,
+        "late": -0.009335638791824202,
+        "early_minus_late": 0.003440271845897634
+      },
+      "promotion_flag": {
+        "early": 0.38289762372869807,
+        "late": 0.551683142203131,
+        "early_minus_late": -0.1687855184744329
+      }
+    }
+  }
+}

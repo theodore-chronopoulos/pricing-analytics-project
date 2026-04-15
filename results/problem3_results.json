@@ -1,0 +1,716 @@
+{
+  "problem": 3,
+  "model_source": "results/problem1_results.json",
+  "seed": 5132,
+  "raw_scale_coefficients": {
+    "intercept": -2.815324976338604,
+    "prop_starrating": 0.4761238772134337,
+    "prop_review_score": 0.1198971101959855,
+    "prop_brand_bool": 0.22992269948768013,
+    "prop_location_score": 0.016338173306882708,
+    "prop_accesibility_score": 0.5628726700509642,
+    "prop_log_historical_price": -0.037367603017286886,
+    "price_usd": -0.007323071607216904,
+    "promotion_flag": 0.45402977040295234
+  },
+  "results": {
+    "data1.csv": {
+      "dataset_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data1.csv",
+      "beta_price": -0.007323071607216904,
+      "current_expected_revenue": 104.6498097260392,
+      "optimal_expected_revenue": 177.8056240322087,
+      "common_optimal_price": 314.36034603528583,
+      "optimal_prices_1_based": [
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583,
+        314.36034603528583
+      ],
+      "rows": [
+        {
+          "index_1_based": 1,
+          "original_price": 150.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 2,
+          "original_price": 140.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 3,
+          "original_price": 145.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 4,
+          "original_price": 125.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 5,
+          "original_price": 154.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 6,
+          "original_price": 144.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 7,
+          "original_price": 131.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 8,
+          "original_price": 91.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 9,
+          "original_price": 77.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 10,
+          "original_price": 107.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 11,
+          "original_price": 95.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 12,
+          "original_price": 95.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 13,
+          "original_price": 108.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 14,
+          "original_price": 75.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 15,
+          "original_price": 107.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 16,
+          "original_price": 131.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 17,
+          "original_price": 105.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 18,
+          "original_price": 120.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 19,
+          "original_price": 121.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 20,
+          "original_price": 147.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 21,
+          "original_price": 121.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 22,
+          "original_price": 156.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 23,
+          "original_price": 147.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 24,
+          "original_price": 158.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 25,
+          "original_price": 118.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 26,
+          "original_price": 99.0,
+          "optimal_price": 314.36034603528583
+        },
+        {
+          "index_1_based": 27,
+          "original_price": 112.0,
+          "optimal_price": 314.36034603528583
+        }
+      ]
+    },
+    "data2.csv": {
+      "dataset_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data2.csv",
+      "beta_price": -0.007323071607216904,
+      "current_expected_revenue": 113.35985706876208,
+      "optimal_expected_revenue": 248.8045049323727,
+      "common_optimal_price": 385.3592297020865,
+      "optimal_prices_1_based": [
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865,
+        385.3592297020865
+      ],
+      "rows": [
+        {
+          "index_1_based": 1,
+          "original_price": 233.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 2,
+          "original_price": 161.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 3,
+          "original_price": 123.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 4,
+          "original_price": 118.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 5,
+          "original_price": 125.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 6,
+          "original_price": 102.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 7,
+          "original_price": 146.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 8,
+          "original_price": 206.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 9,
+          "original_price": 212.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 10,
+          "original_price": 137.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 11,
+          "original_price": 143.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 12,
+          "original_price": 110.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 13,
+          "original_price": 104.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 14,
+          "original_price": 123.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 15,
+          "original_price": 86.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 16,
+          "original_price": 69.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 17,
+          "original_price": 84.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 18,
+          "original_price": 84.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 19,
+          "original_price": 73.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 20,
+          "original_price": 98.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 21,
+          "original_price": 105.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 22,
+          "original_price": 147.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 23,
+          "original_price": 123.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 24,
+          "original_price": 134.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 25,
+          "original_price": 73.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 26,
+          "original_price": 133.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 27,
+          "original_price": 89.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 28,
+          "original_price": 117.0,
+          "optimal_price": 385.3592297020865
+        },
+        {
+          "index_1_based": 29,
+          "original_price": 90.0,
+          "optimal_price": 385.3592297020865
+        }
+      ]
+    },
+    "data3.csv": {
+      "dataset_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data3.csv",
+      "beta_price": -0.007323071607216904,
+      "current_expected_revenue": 118.1681578977021,
+      "optimal_expected_revenue": 176.47291840493168,
+      "common_optimal_price": 313.0276396603539,
+      "optimal_prices_1_based": [
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539,
+        313.0276396603539
+      ],
+      "rows": [
+        {
+          "index_1_based": 1,
+          "original_price": 140.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 2,
+          "original_price": 211.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 3,
+          "original_price": 150.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 4,
+          "original_price": 144.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 5,
+          "original_price": 191.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 6,
+          "original_price": 195.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 7,
+          "original_price": 115.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 8,
+          "original_price": 281.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 9,
+          "original_price": 128.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 10,
+          "original_price": 101.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 11,
+          "original_price": 138.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 12,
+          "original_price": 129.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 13,
+          "original_price": 101.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 14,
+          "original_price": 180.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 15,
+          "original_price": 153.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 16,
+          "original_price": 181.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 17,
+          "original_price": 171.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 18,
+          "original_price": 105.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 19,
+          "original_price": 123.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 20,
+          "original_price": 190.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 21,
+          "original_price": 101.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 22,
+          "original_price": 115.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 23,
+          "original_price": 105.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 24,
+          "original_price": 603.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 25,
+          "original_price": 138.0,
+          "optimal_price": 313.0276396603539
+        },
+        {
+          "index_1_based": 26,
+          "original_price": 120.0,
+          "optimal_price": 313.0276396603539
+        }
+      ]
+    },
+    "data4.csv": {
+      "dataset_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data4.csv",
+      "beta_price": -0.007323071607216904,
+      "current_expected_revenue": 78.68910937590866,
+      "optimal_expected_revenue": 214.4735334836299,
+      "common_optimal_price": 351.02825682855064,
+      "optimal_prices_1_based": [
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064,
+        351.02825682855064
+      ],
+      "rows": [
+        {
+          "index_1_based": 1,
+          "original_price": 71.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 2,
+          "original_price": 45.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 3,
+          "original_price": 92.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 4,
+          "original_price": 152.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 5,
+          "original_price": 195.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 6,
+          "original_price": 45.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 7,
+          "original_price": 105.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 8,
+          "original_price": 85.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 9,
+          "original_price": 100.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 10,
+          "original_price": 82.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 11,
+          "original_price": 105.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 12,
+          "original_price": 49.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 13,
+          "original_price": 68.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 14,
+          "original_price": 56.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 15,
+          "original_price": 64.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 16,
+          "original_price": 106.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 17,
+          "original_price": 52.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 18,
+          "original_price": 40.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 19,
+          "original_price": 105.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 20,
+          "original_price": 112.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 21,
+          "original_price": 140.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 22,
+          "original_price": 114.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 23,
+          "original_price": 51.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 24,
+          "original_price": 86.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 25,
+          "original_price": 48.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 26,
+          "original_price": 50.0,
+          "optimal_price": 351.02825682855064
+        },
+        {
+          "index_1_based": 27,
+          "original_price": 110.0,
+          "optimal_price": 351.02825682855064
+        }
+      ]
+    }
+  }
+}

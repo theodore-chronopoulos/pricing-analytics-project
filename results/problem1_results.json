@@ -1,0 +1,113 @@
+{
+  "data_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data.csv",
+  "scaling_stats": {
+    "prop_starrating": {
+      "mean": 3.157402505734957,
+      "std": 0.8571822862649964,
+      "scaled": true
+    },
+    "prop_review_score": {
+      "mean": 3.9876804632407246,
+      "std": 0.9071191629160898,
+      "scaled": true
+    },
+    "prop_brand_bool": {
+      "mean": 0.7357279637145527,
+      "std": 1.0,
+      "scaled": false
+    },
+    "prop_location_score": {
+      "mean": 2.6171728460417363,
+      "std": 1.3481508978402195,
+      "scaled": true
+    },
+    "prop_accesibility_score": {
+      "mean": 0.005993111516316034,
+      "std": 0.07718286163824864,
+      "scaled": true
+    },
+    "prop_log_historical_price": {
+      "mean": 4.27631054382422,
+      "std": 1.7895033851701303,
+      "scaled": true
+    },
+    "price_usd": {
+      "mean": 141.19362259736354,
+      "std": 181.76934987695918,
+      "scaled": true
+    },
+    "promotion_flag": {
+      "mean": 0.14480847531844532,
+      "std": 1.0,
+      "scaled": false
+    }
+  },
+  "dataset_summary": {
+    "queries": 8354,
+    "alternatives": 153009,
+    "avg_alternatives_per_query": 18.31565717021786,
+    "chosen_queries": 5848,
+    "no_purchase_queries": 2506
+  },
+  "normalized_coefficients": {
+    "intercept": -1.9815321907864278,
+    "prop_starrating": 0.4081249536151655,
+    "prop_review_score": 0.10876096623704055,
+    "prop_brand_bool": 0.22992269948768013,
+    "prop_location_score": 0.02202632301274303,
+    "prop_accesibility_score": 0.04344412341249515,
+    "prop_log_historical_price": -0.06686945209512846,
+    "price_usd": -1.3311099651462353,
+    "promotion_flag": 0.45402977040295234
+  },
+  "raw_scale_coefficients": {
+    "intercept": -2.815324976338604,
+    "prop_starrating": 0.4761238772134337,
+    "prop_review_score": 0.1198971101959855,
+    "prop_brand_bool": 0.22992269948768013,
+    "prop_location_score": 0.016338173306882708,
+    "prop_accesibility_score": 0.5628726700509642,
+    "prop_log_historical_price": -0.037367603017286886,
+    "price_usd": -0.007323071607216904,
+    "promotion_flag": 0.45402977040295234
+  },
+  "fit_summary": {
+    "final_log_likelihood": -20611.325967273147,
+    "average_log_likelihood_per_query": -2.4672403599800274,
+    "final_gradient_norm": 1.2165194069039314e-11,
+    "iterations_recorded": 6
+  },
+  "history": [
+    {
+      "iteration": 1,
+      "log_likelihood": -22856.20636359019,
+      "gradient_norm": 2315.6402180198406
+    },
+    {
+      "iteration": 2,
+      "log_likelihood": -21767.70230367886,
+      "gradient_norm": 2449.9599537243403
+    },
+    {
+      "iteration": 3,
+      "log_likelihood": -20616.847281424103,
+      "gradient_norm": 156.80422054587152
+    },
+    {
+      "iteration": 4,
+      "log_likelihood": -20611.32686712606,
+      "gradient_norm": 2.0764776261057243
+    },
+    {
+      "iteration": 5,
+      "log_likelihood": -20611.32596727317,
+      "gradient_norm": 0.0003274819124711175
+    },
+    {
+      "iteration": 6,
+      "log_likelihood": -20611.325967273147,
+      "gradient_norm": 1.2165194069039314e-11
+    }
+  ],
+  "seed": 5132
+}

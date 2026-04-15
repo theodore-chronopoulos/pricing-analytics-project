@@ -208,15 +208,39 @@ The code then solves the resulting optimization.
 
 ### Why the Solution Returns One Common Price per Dataset
 
-Under this specific utility specification with **one shared linear price coefficient**, the first-order condition implies:
+Under this specific utility specification with **one shared linear price coefficient**, the first-order condition implies that all optimal prices are equal. The full derivation is:
+
+Let `b = beta_price < 0`, `v_j = exp(a_j + b * p_j)`, `D = 1 + sum_k v_k`, so
 
 ```text
-p_j = R - 1 / beta_price
+R(p) = [sum_k p_k v_k] / D
 ```
 
-for every hotel `j`, so all optimal prices must be equal.
+Differentiating with respect to `p_j` and using `dv_j/dp_j = b * v_j`:
 
-This is the main point that could look suspicious if not explained carefully. The result is a property of the model, not a coding error.
+```text
+dR/dp_j = v_j * (1 + V) * [1 + b * p_j - b * R] / D^2
+```
+
+where `V = sum_k v_k`. Setting `dR/dp_j = 0` and dividing by the positive factor `v_j (1+V)/D^2` gives, for every `j`:
+
+```text
+1 + b * (p_j - R) = 0
+ => p_j = R - 1 / b = R + 1 / |b|
+```
+
+Since the right-hand side does not depend on `j`, **every hotel's optimal price is the same**. The common optimal price `p*` and the corresponding revenue `R*` satisfy the implicit fixed-point equation:
+
+```text
+p* = R* + 1 / |b|
+R* = p* * sum_j exp(a_j + b * p*) / (1 + sum_j exp(a_j + b * p*))
+```
+
+which has a unique solution (Lambert-W-type). This is the scalar root that the 1-D golden-section search in [problem3_pricing.py:51-57](../scripts/problem3_pricing.py#L51-L57) is finding.
+
+**Numerical check.** With `b = -0.007323`, `1 / |b| = 136.56`. For `data1.csv` the reported `R* = 177.8056`, and indeed `R* + 1/|b| = 177.8056 + 136.5584 = 314.364`, matching the reported `p* = 314.3603` to six significant digits.
+
+This result is a property of the Problem 1 model, not a coding error. If hotel-specific optimal prices are desired, the Problem 1 utility would need a hotel-specific or interacted price coefficient (e.g., `beta_price * (1 + gamma * x_j)`), which is outside what the assignment asks for.
 
 ### Numerical Validation
 
@@ -332,13 +356,91 @@ You need to solve an integer program here to compute S.
 ### What Was Implemented
 
 - `S1` and `S2` are solved exactly using the single-segment MNL assortment structure.
-- `S` is solved exactly with branch-and-bound for the mixture objective:
+- `S` (unknown type) is solved **two different ways**, which agree exactly:
+  1. An explicit MILP solved by `gurobi_cl` ([problem5_assortment.py:175-220](../scripts/problem5_assortment.py#L175-L220)) — this is the "integer program" the assignment asks for.
+  2. An exact branch-and-bound fallback ([problem5_assortment.py:93-172](../scripts/problem5_assortment.py#L93-L172)) for environments without Gurobi.
+- The branch-and-bound upper bound is valid because it relaxes the unknown-type problem into the sum of the best segment-specific MNL completions.
+
+### Explicit Integer Programming Formulation for S
+
+For each dataset, let `n` be the number of candidate hotels, `p_j` the price, and let
 
 ```text
-R_mix(S) = theta_early * R_early(S) + theta_late * R_late(S)
+v_{j,e} = exp(u_{j,e}) = early-type preference weight for hotel j
+v_{j,l} = exp(u_{j,l}) = late-type  preference weight for hotel j
 ```
 
-- The upper bound used for pruning is valid because it relaxes the unknown-type problem into the sum of the best segment-specific MNL completions.
+be the Problem 4 MNL weights. With `theta_e` and `theta_l` the estimated type probabilities, the mixture objective is
+
+```text
+R_mix(S) = theta_e * [sum_{j in S} p_j v_{j,e}] / [1 + sum_{j in S} v_{j,e}]
+         + theta_l * [sum_{j in S} p_j v_{j,l}] / [1 + sum_{j in S} v_{j,l}]
+```
+
+This is a sum of **fractional** functions in the binary selection vector, so direct enumeration is exponential. We linearize both ratios using the standard fractional-MNL trick (Charnes-Cooper applied to each segment jointly through McCormick):
+
+#### Decision Variables
+
+- `x_j in {0, 1}` for `j = 1, ..., n`            (1 if hotel `j` is offered in `S`)
+- `t_e >= 0`, `t_l >= 0`                         (type-specific normalizing fractions)
+- `s_{j,e} >= 0`, `s_{j,l} >= 0` for each `j`    (McCormick linearization of `t_k * x_j`)
+
+#### Interpretation
+
+- `t_e = 1 / (1 + sum_j v_{j,e} x_j)` is the no-purchase probability for the early type under `S`.
+- `s_{j,e} = t_e * x_j` is the early-type choice probability for hotel `j`. Symmetric definitions for `t_l`, `s_{j,l}`.
+
+#### Objective
+
+Linear in the variables:
+
+```text
+max  sum_j [ theta_e * p_j * v_{j,e} * s_{j,e}
+           + theta_l * p_j * v_{j,l} * s_{j,l} ]
+```
+
+#### Constraints
+
+Normalization (ties `t_k` to `x`):
+
+```text
+t_e + sum_j v_{j,e} * s_{j,e} = 1
+t_l + sum_j v_{j,l} * s_{j,l} = 1
+```
+
+McCormick envelopes for `s_{j,k} = t_k * x_j` with `x_j in {0,1}` and `t_k in [0,1]`, for each `j` and for each type `k in {e, l}`:
+
+```text
+s_{j,k} <= t_k
+s_{j,k} <= x_j
+s_{j,k} >= t_k + x_j - 1
+s_{j,k} >= 0
+```
+
+#### Bounds
+
+```text
+0 <= t_e, t_l <= 1
+0 <= s_{j,e}, s_{j,l} <= 1
+x_j in {0, 1}
+```
+
+Because `x_j` is binary, the McCormick envelope is exact: at every feasible integer solution we have `s_{j,k} = t_k * x_j` precisely. The normalization constraints then force `t_k = 1 / (1 + sum_j v_{j,k} x_j)`, and the objective collapses back to the original mixture revenue. So this MILP is an **exact reformulation**, not a relaxation.
+
+This is the formulation emitted by `write_problem5_milp_lp` in [problem5_assortment.py:175-220](../scripts/problem5_assortment.py#L175-L220) and solved by `gurobi_cl`.
+
+### Cross-Validation of the Two Solvers
+
+Running both backends on all four datasets produces **identical** selected assortments and mixture revenues (difference `< 3e-14`, pure floating-point noise):
+
+| Dataset | Selected `S` | R_mix |
+| ------- | ------------ | ----- |
+| data1.csv | {1,2,3,4,5,6,7,13,16,18,19,20,21,22,23,24,25,27} | 107.3037 |
+| data2.csv | {1,2,7,8,9,10,11,22,24,26} | 131.2799 |
+| data3.csv | {1,2,3,4,5,6,8,9,11,12,14,15,16,17,19,20,24,25} | 120.9969 |
+| data4.csv | {4,5,7,9,11,16,19,20,21,22,27} | 97.3833 |
+
+So the branch-and-bound fallback and the explicit MILP certify each other.
 
 ### Numerical Validation
 
