@@ -1,0 +1,9 @@
+
+\paragraph{Held-out predictive comparison.}
+To approximate the predictive-model portion of Problem 7, we split the real data at the query level into an 80\% training set and a 20\% held-out test set. We used the training split to calibrate the outside-option threshold for the AI-style predictor, and then evaluated both the AI-style predictor and the MNL baseline on held-out queries.
+
+Our primary metric was \emph{query-level top-1 accuracy}: a prediction is counted as correct if it identifies the exact booked hotel within the choice set, or correctly predicts \texttt{NO\_PURCHASE} when no hotel was booked.
+
+On the held-out queries, the AI-style predictor achieved a query-level top-1 accuracy of 0.1807, while the MNL baseline achieved 0.3094. For the coarser purchase-vs.-no-purchase decision, the AI-style predictor achieved 0.5996, while the MNL baseline achieved 0.3142.
+
+These results should still be interpreted as a sampled approximation rather than a full live-prompt predictive experiment, because the AI predictor here is a ChatGPT-style decision rule calibrated on the training split rather than separate live completions on each held-out query.

@@ -1,0 +1,22 @@
+
+\subsection*{Problem 7: AI Agents as Customers}
+
+For this problem, we implemented a sampled approximation of the AI-customer experiment rather than a full run over all 8{,}354 search queries in \texttt{data.csv}. Specifically, we used ChatGPT (GPT-5.4 Thinking) to define the decision framework, and generated AI-style booking choices for the first 100 search queries (1{,}956 hotel rows total) after removing the booking indicator. We then used these AI-generated choices as the new booking column and re-estimated the MNL model on this 100-query AI sample.
+
+The prompt framing used for the AI-choice stage was:
+
+\begin{quote}
+You are choosing ONE hotel option from a single Expedia-style search result page. Act like a realistic customer trying to maximize value for the trip described by the customer context.
+
+Rules:
+Choose exactly one option: either one hotel row or NO\_PURCHASE.
+Use the hotel attributes and customer context only.
+Prefer better review score, star rating, location, accessibility, and promotions, but weigh them against price.
+Return valid JSON only.
+\end{quote}
+
+In practice, the sampled AI-generated choices were implemented using a consistent ChatGPT-style decision rule reflecting those preferences. This means the exercise should be interpreted as a sampled approximation of Problem 7 rather than a full live-prompt evaluation of every query in the dataset.
+
+Comparing the re-estimated AI MNL to the human MNL from Problem 1, the coefficient signs were mostly aligned. In both cases, higher star rating, review score, brand, location score, and promotion increased choice likelihood, while higher displayed price and historical price reduced it. However, the AI coefficients were much larger in magnitude, indicating more extreme and deterministic tradeoffs than in the human data. The largest AI emphasis was on review score, promotion, brand, and star rating. One important limitation is that the AI sample selected a hotel in every one of the 100 sampled queries and never chose the outside option, even though the prompt allowed NO\_PURCHASE. This likely contributes to the large difference in the estimated intercept and makes the AI appear more purchase-prone than real users.
+
+We did not complete the held-out predictive experiment from the final paragraph of Problem 7. Therefore, the results for this problem should be interpreted as evidence about how an AI-style decision process compares to human MNL estimates on a sampled subset, not as a full assessment of predictive performance on held-out queries.

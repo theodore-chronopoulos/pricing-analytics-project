@@ -1,0 +1,7 @@
+
+\paragraph{Literal prompt-based held-out prediction sample.}
+To more closely match the predictive-model paragraph of Problem 7, we also ran a small literal in-chat experiment. We provided the AI agent with 5 labeled real-query examples as context and then asked it to predict booking decisions on 20 held-out real queries, allowing either one hotel choice or \texttt{NO\_PURCHASE}. 
+
+We evaluated these predictions using query-level top-1 accuracy: a prediction is correct if it identifies the exact booked hotel within the query, or correctly predicts \texttt{NO\_PURCHASE} when no hotel was booked. On this 20-query held-out sample, the AI agent achieved a top-1 accuracy of 0.2000.
+
+This experiment more closely follows the wording of the assignment than the larger rule-based approximation, but it is still only a small sample rather than a full held-out evaluation over all queries.
