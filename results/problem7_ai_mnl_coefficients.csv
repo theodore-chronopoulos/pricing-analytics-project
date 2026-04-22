@@ -1,0 +1,10 @@
+parameter,estimate
+intercept,0.2876861344382767
+prop_starrating,2.1389417169884286
+prop_review_score,4.33451414924843
+prop_brand_bool,2.183893015110541
+prop_location_score,1.401583986388658
+prop_accesibility_score,0.0159788198292581
+prop_log_historical_price,-1.3993065748073354
+price_usd,-0.0632988970893548
+promotion_flag,2.375606383400576
