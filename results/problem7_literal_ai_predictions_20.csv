@@ -1,0 +1,21 @@
+srch_id,ai_pred_choice,actual_choice,correct_top1,reason
+3346,3,5,False,Option 3 offered the best blend of quality and price among the branded choices.
+9051,NO_PURCHASE,1,False,"All available hotels looked expensive relative to the quality shown, so I chose no purchase."
+12894,1,4,False,Option 1 had the strongest review-quality tradeoff at a moderate price.
+15207,2,1,False,Option 2 matched the top review tier and included a promotion at the same price as option 1.
+15622,2,1,False,"Option 2 looked like the strongest value: high star rating, very strong location, and much lower price than the premium options."
+34295,2,5,False,Option 2 delivered 4 stars and a solid review at a much lower price than similar branded options.
+44274,1,3,False,Option 1 looked like the best overall hotel despite being somewhat pricier than the budget choices.
+45273,6,6,True,Option 6 clearly dominated on review score while remaining reasonably priced.
+45609,3,4,False,Option 3 had the best price among the better-located options and included a promotion.
+46908,3,1,False,"Option 3 had the strongest combined star, review, brand, and location profile."
+49938,5,4,False,"Option 5 stood out on quality, location, and promotion without being the most expensive option."
+51888,NO_PURCHASE,4,False,"Given the long booking window and relatively high prices, none of the hotels seemed compelling enough to book."
+53406,5,5,True,Option 5 had an unusually good review score for a very low price.
+54599,2,3,False,Option 2 had the best review score at a competitive price.
+65682,4,6,False,Option 4 paired a top review score with a much better price than the closest alternative.
+66616,1,3,False,Option 1 had the highest review score in the set and also came with a promotion.
+72581,5,5,True,"Option 5 was the best-quality option and still reasonably priced, with a promotion."
+74160,4,4,True,Option 4 provided the best star/review combination at a much lower price than the branded premium choices.
+77958,3,1,False,"Option 3 was a standout: 4 stars, 5 review score, excellent location, and low price."
+78556,5,3,False,Option 5 looked like the best value despite lower stars because it combined a very high review score with the lowest price.
