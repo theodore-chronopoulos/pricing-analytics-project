@@ -1,165 +1,159 @@
-# Pricing Analytics Project
+# Pricing Analytics Project (ORIE 5132)
 
-This repository contains code for Problems 1-5 of the ORIE 5132 pricing analytics project.
+This repository contains the code, data, and write-up for the
+ORIE 5132 course project on choice modeling, assortment optimization,
+and pricing.
+
+## Repository Layout
+
+```text
+.
+├── README.md                       # this file (run instructions, repo overview)
+├── report.tex                      # main report (LaTeX source)
+├── Project.pdf                     # original assignment PDF
+├── data.csv                        # full Expedia dataset (153,009 rows / 8,354 queries)
+├── data1.csv … data4.csv           # small datasets for assortment / pricing
+├── scripts/                        # all Python source code
+│   ├── mnl_utils.py                #   shared MNL / assortment / pricing utilities
+│   ├── problem1_mnl.py             #   Problem 1: MNL estimation
+│   ├── problem2_assortment.py      #   Problem 2: assortment optimization
+│   ├── problem3_pricing.py         #   Problem 3: pricing optimization
+│   ├── problem4_mixture.py         #   Problem 4: early/late MMNL
+│   ├── problem5_assortment.py      #   Problem 5: type-aware/unaware assortment
+│   └── problem_6_mmnl_other.py     #   Problem 6: family/non-family MMNL + Problem 5 repeat
+└── results/                        # JSON outputs produced by the scripts
+    ├── problem1_results.json
+    ├── problem2_results.json
+    ├── problem3_results.json
+    ├── problem4_results.json
+    ├── problem5_results.json           # branch-and-bound backend
+    ├── problem5_results_gurobi.json    # Gurobi MILP backend (matches BnB)
+    └── problem6_results.json
+```
 
 ## What Is Implemented
 
-- Problem 1: MNL estimation on `data.csv`
-- Problem 2: MNL assortment optimization on `data1.csv` to `data4.csv`
-- Problem 3: MNL pricing optimization on `data1.csv` to `data4.csv`
-- Problem 4: early-vs-late mixture of MNL models
-- Problem 5: type-aware and type-unaware assortment optimization
-
-## Solver Choice for Problem 5
-
-There are two ways to solve the unknown-type assortment `S` in Problem 5:
-
-1. Exact branch-and-bound fallback
-   - Implemented directly in Python
-   - Deterministic
-   - Does not require Gurobi
-   - Good default if you only want the project results
-
-2. Gurobi MILP backend
-   - Uses an explicit integer optimization formulation
-   - Solved through the installed `gurobi_cl` command-line optimizer
-   - Triggered with `--use-gurobi`
-   - This is the closest implementation to the assignment language that says to solve an integer program
-
-Important environment note:
-
-- The current codebase does **not** use `gurobipy` directly because it is not available for the active Python installation in this workspace.
-- Problem 5 uses `gurobi_cl` instead, which is installed locally and works.
-
-## Dependencies
-
-### Required
-
-- Python 3
-- Standard library only for Problems 1-5 scripts
-
-### Optional
-
-- Gurobi Optimizer CLI (`gurobi_cl`) for the MILP version of Problem 5
-
-### Current Scripts
-
-- [scripts/mnl_utils.py](scripts/mnl_utils.py)
-- [scripts/problem1_mnl.py](scripts/problem1_mnl.py)
-- [scripts/problem2_assortment.py](scripts/problem2_assortment.py)
-- [scripts/problem3_pricing.py](scripts/problem3_pricing.py)
-- [scripts/problem4_mixture.py](scripts/problem4_mixture.py)
-- [scripts/problem5_assortment.py](scripts/problem5_assortment.py)
+| Problem | Topic | Script | Output |
+| --- | --- | --- | --- |
+| 1 | MNL estimation on `data.csv` | `scripts/problem1_mnl.py` | `results/problem1_results.json` |
+| 2 | Assortment optimization on `data1..4.csv` | `scripts/problem2_assortment.py` | `results/problem2_results.json` |
+| 3 | Pricing optimization on `data1..4.csv` | `scripts/problem3_pricing.py` | `results/problem3_results.json` |
+| 4 | Early-vs-late mixture of MNL | `scripts/problem4_mixture.py` | `results/problem4_results.json` |
+| 5 | Type-aware and type-unaware assortment (MILP) | `scripts/problem5_assortment.py` | `results/problem5_results*.json` |
+| 6 | Family/non-family MMNL + Problem-5 repeat | `scripts/problem_6_mmnl_other.py` | `results/problem6_results.json` |
+| 7 | AI Agents as Customers | _to be added_ | _to be added_ |
 
 ## Setup
 
-Create the virtual environment:
+Python 3 is required. The Problem 1–6 scripts use only the Python standard
+library, so a plain virtualenv is enough:
 
 ```bash
 python3 -m venv .venv
-```
-
-Activate it:
-
-```bash
 source .venv/bin/activate
 ```
 
-No pip installs are required for Problems 1-5.
+No `pip install` is required for Problems 1–6.
+
+For Problem 5 with the explicit MILP backend, `gurobi_cl` (the Gurobi
+command-line optimizer) must be on `PATH`. The branch-and-bound fallback
+in the same script does not need Gurobi.
+
+## How to Run the Code
+
+All commands are run from the repository root.
+
+### One-shot full pipeline (no Gurobi needed)
+
+```bash
+python scripts/problem1_mnl.py        --output-json results/problem1_results.json
+python scripts/problem2_assortment.py --problem1-json results/problem1_results.json --output-json results/problem2_results.json
+python scripts/problem3_pricing.py    --problem1-json results/problem1_results.json --output-json results/problem3_results.json
+python scripts/problem4_mixture.py    --output-json results/problem4_results.json
+python scripts/problem5_assortment.py --problem4-json results/problem4_results.json --output-json results/problem5_results.json
+python scripts/problem_6_mmnl_other.py --output-json results/problem6_results.json
+```
+
+### Problem 5 with the Gurobi MILP backend
+
+```bash
+python scripts/problem5_assortment.py \
+    --problem4-json results/problem4_results.json \
+    --use-gurobi \
+    --output-json results/problem5_results_gurobi.json
+```
+
+This solves the explicit integer program for the unknown-type assortment
+$S$ requested by Problem 5. The branch-and-bound and MILP backends
+return identical $S$ on all four datasets (floating-point difference
+$<3\times10^{-14}$).
+
+### Per-problem commands
+
+```bash
+# Problem 1
+python scripts/problem1_mnl.py --output-json results/problem1_results.json
+
+# Problem 2
+python scripts/problem2_assortment.py \
+    --problem1-json results/problem1_results.json \
+    --output-json results/problem2_results.json
+
+# Problem 3
+python scripts/problem3_pricing.py \
+    --problem1-json results/problem1_results.json \
+    --output-json results/problem3_results.json
+
+# Problem 4
+python scripts/problem4_mixture.py --output-json results/problem4_results.json
+
+# Problem 5 (branch-and-bound)
+python scripts/problem5_assortment.py \
+    --problem4-json results/problem4_results.json \
+    --output-json results/problem5_results.json
+
+# Problem 5 (Gurobi MILP)
+python scripts/problem5_assortment.py \
+    --problem4-json results/problem4_results.json \
+    --use-gurobi \
+    --output-json results/problem5_results_gurobi.json
+
+# Problem 6
+python scripts/problem_6_mmnl_other.py --output-json results/problem6_results.json
+```
 
 ## Reproducibility
 
-- All scripts default to seed `5132`
-- The current code paths are deterministic
-- Each script accepts `--seed` explicitly
+- All scripts default to seed `5132`. Pass `--seed <int>` to override.
+- The Problem 1–6 code paths are deterministic; the seed is recorded in
+  every JSON output for traceability.
 
-Example:
+## Notes on the Reported Numbers
 
-```bash
-python scripts/problem1_mnl.py --seed 5132 --output-json results/problem1_results.json
-```
+- **Problem 3** returns one common optimal price per dataset. This is a
+  consequence of the Problem 1 utility specification using a single
+  shared linear price coefficient: the first-order condition becomes
+  $p_j^* = R^* + 1/|\beta_{\text{price}}|$ for every $j$, so all
+  optimal prices must be identical (see Section 3 of `report.tex`).
+- **Problem 5** solved with `--use-gurobi` is the explicit integer
+  programming formulation requested by the assignment. Without
+  `--use-gurobi`, the same problem is solved exactly via branch-and-bound;
+  the two backends agree on every dataset.
+- **Problem 6** uses the family-vs-non-family segmentation
+  (`srch_children_count > 0`) as the alternative customer-type definition
+  required by the assignment.
 
-## Output Location
+## Problem 7
 
-All result files should be written to the project `results/` folder:
+Problem 7 (AI Agents as Customers) is described conceptually in
+Section 7 of `report.tex`. The implementation script and AI-generated
+outputs are still to be added to this repository.
 
-- [results](results)
+## Building the Report
 
-## Exact Commands
-
-Run these from the project root.
-
-### Problem 1
-
-```bash
-python scripts/problem1_mnl.py --output-json results/problem1_results.json
-```
-
-### Problem 2
-
-```bash
-python scripts/problem2_assortment.py --problem1-json results/problem1_results.json --output-json results/problem2_results.json
-```
-
-### Problem 3
+The report is in plain LaTeX (no exotic packages):
 
 ```bash
-python scripts/problem3_pricing.py --problem1-json results/problem1_results.json --output-json results/problem3_results.json
+pdflatex report.tex
+pdflatex report.tex   # second pass for cross-references
 ```
-
-### Problem 4
-
-```bash
-python scripts/problem4_mixture.py --output-json results/problem4_results.json
-```
-
-### Problem 5 with Exact Python Fallback
-
-```bash
-python scripts/problem5_assortment.py --problem4-json results/problem4_results.json --output-json results/problem5_results.json
-```
-
-### Problem 5 with Gurobi MILP
-
-```bash
-python scripts/problem5_assortment.py --problem4-json results/problem4_results.json --use-gurobi --output-json results/problem5_results_gurobi.json
-```
-
-## Full Run Sequence
-
-### Full Run with Python Fallback for Problem 5
-
-```bash
-python scripts/problem1_mnl.py --output-json results/problem1_results.json
-python scripts/problem2_assortment.py --problem1-json results/problem1_results.json --output-json results/problem2_results.json
-python scripts/problem3_pricing.py --problem1-json results/problem1_results.json --output-json results/problem3_results.json
-python scripts/problem4_mixture.py --output-json results/problem4_results.json
-python scripts/problem5_assortment.py --problem4-json results/problem4_results.json --output-json results/problem5_results.json
-```
-
-### Full Run with Gurobi MILP for Problem 5
-
-```bash
-python scripts/problem1_mnl.py --output-json results/problem1_results.json
-python scripts/problem2_assortment.py --problem1-json results/problem1_results.json --output-json results/problem2_results.json
-python scripts/problem3_pricing.py --problem1-json results/problem1_results.json --output-json results/problem3_results.json
-python scripts/problem4_mixture.py --output-json results/problem4_results.json
-python scripts/problem5_assortment.py --problem4-json results/problem4_results.json --use-gurobi --output-json results/problem5_results_gurobi.json
-```
-
-## Existing Result Files
-
-Current generated outputs include:
-
-- `results/problem1_results.json`
-- `results/problem2_results.json`
-- `results/problem3_results.json`
-- `results/problem4_results.json`
-- `results/problem5_results.json`
-- `results/problem5_results_gurobi.json`
-
-## Notes on Interpretation
-
-- Problem 3 returns one common optimal price per dataset because the Problem 1 utility specification uses one shared linear price coefficient.
-- Problem 5 solved with `--use-gurobi` is the explicit integer optimization version requested by the assignment.
-- Problem 5 without `--use-gurobi` still solves the same unknown-type assortment problem exactly, but through an internal branch-and-bound algorithm.

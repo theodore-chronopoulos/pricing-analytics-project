@@ -3,13 +3,10 @@
 __pycache__/
 *.pyc
 
-# Unrelated local examples
-hw7.py
-exercise_2.py
 
 # Local course materials / data files
 slides/
-Project (1).pdf
+# Project (1).pdf
 # data.csv
 # data1.csv
 # data2.csv

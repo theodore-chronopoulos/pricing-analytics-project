@@ -8,8 +8,9 @@
 \usepackage{longtable}
 \usepackage{hyperref}
 \usepackage{enumitem}
-\usepackage{listings}
+\usepackage{graphicx}
 \usepackage{xcolor}
+\usepackage{placeins}
 
 \hypersetup{
   colorlinks=true,
@@ -18,295 +19,415 @@
   citecolor=blue!60!black
 }
 
-\lstset{
-  basicstyle=\ttfamily\small,
-  breaklines=true,
-  frame=single,
-  framerule=0pt,
-  backgroundcolor=\color{gray!8},
-  columns=fullflexible
-}
-
-\newcommand{\vj}{v_{j}}
-\newcommand{\vjk}{v_{j,k}}
-\newcommand{\thetae}{\theta_{1}}
-\newcommand{\thetal}{\theta_{2}}
-
 \title{ORIE 5132 Project: Choice Modeling, Assortment Optimization, and Pricing}
-\author{Theodore Chronopoulos \\ Pricing Analytics and Revenue Management}
+\author{Theodore Chronopoulos}
 \date{Spring 2026}
 
 \begin{document}
 \maketitle
 
-\begin{abstract}
-This report presents the solutions to Problems 1--6 of the ORIE 5132 course project.
-We estimate a Multinomial Logit (MNL) choice model on Expedia hotel search data,
-use the fitted model for unconstrained assortment optimization and pricing,
-extend to a mixture of MNL (MMNL) with two customer types,
-and solve the type-aware and type-unaware assortment problems.
-Problem 6 repeats the exercise with a different segmentation (family vs.\ non-family).
-For every problem we state the model, derive the structural result used,
-describe the solution method, and report the numerical output together with
-sanity checks that verify correctness.
-\end{abstract}
-
-\tableofcontents
-
 % =====================================================================
-\section{Data and Notation}
-\label{sec:data}
-
-We use the Expedia dataset \texttt{data.csv} (8\,354 queries, 153\,009 hotel rows,
-average $18.3$ alternatives per query, 5\,848 booked queries).
-Each query \texttt{srch\_id} is the choice set~$S$ faced by one customer,
-who either books at most one hotel or leaves without booking.
-
-The eight hotel features are, in order:
-\begin{enumerate}[label=\alph*)]
-  \item \texttt{prop\_starrating} (star rating),
-  \item \texttt{prop\_review\_score} (review score),
-  \item \texttt{prop\_brand\_bool} (hotel brand indicator),
-  \item \texttt{prop\_location\_score} (location score),
-  \item \texttt{prop\_accesibility\_score} (accessibility score),
-  \item \texttt{prop\_log\_historical\_price} (log historical price),
-  \item \texttt{price\_usd} (displayed price),
-  \item \texttt{promotion\_flag} (promotion indicator).
-\end{enumerate}
-
-Four small datasets \texttt{data1.csv}, \texttt{data2.csv}, \texttt{data3.csv},
-\texttt{data4.csv} contain 26--29 hotels each and are used for assortment and pricing.
-
-All code is deterministic under seed \texttt{5132}.
-
-% =====================================================================
-\section{Problem 1: MNL Estimation}
+\section*{Problem 1: MNL Model}
 \label{sec:p1}
 
-\subsection{Model}
-Under MNL, hotel $j$ has preference weight
+Each search query \texttt{srch\_id} is a choice set $S$ of displayed hotels.
+Hotel $j$ has utility
 \[
-v_j = e^{u_j}, \qquad
-u_j = \beta_0 + \sum_{i=1}^{8} \beta_i x_{ji},
+u_j \;=\; \beta_0 + \sum_{i=1}^{8} \beta_i\, x_{ji},
+\qquad
+v_j \;=\; e^{u_j},
+\qquad
+\mathbb{P}(j \mid S) \;=\; \frac{v_j}{1 + \sum_{p \in S} v_p},
 \]
-and the probability that a customer chooses $j$ from the displayed set $S$ is
-\[
-\mathbb{P}(j \mid S) \;=\; \frac{v_j}{1 + \sum_{p \in S} v_p}.
-\]
-The outside option has weight $1$.
+with the outside option (no booking) carrying weight $1$.
+The eight features are star rating, review score, hotel brand, location score,
+accessibility score, log historical price, displayed price, and promotion flag.
 
-\subsection{Estimation}
-We maximise the log-likelihood
+\paragraph{Estimation.}
+We maximise the query-level log-likelihood
 \[
-\mathcal{L}(\beta) \;=\; \sum_{q \in Q} \Big[ \mathbf{1}_{\{y_q \ne 0\}} u_{q, y_q}
-  - \log\!\Big(1 + \sum_{p \in S_q} e^{u_{q,p}} \Big) \Big]
+\mathcal{L}(\beta) \;=\;
+\sum_{q \in Q}\!\Big[\, \mathbf{1}_{\{y_q \ne 0\}}\, u_{q,y_q}
+  - \log\!\Big(1 + \sum_{p \in S_q} e^{u_{q,p}}\Big) \Big],
 \]
-by a damped Newton method with backtracking, implemented in
-\texttt{scripts/mnl\_utils.py}.
-Continuous features are $z$-scored before estimation; binary features
-are left at $\{0,1\}$.
-The coefficients reported below are on the \emph{raw} (un-standardised) scale
-so that they can be fed directly to the small datasets.
+which is concave in $\beta$, by a damped Newton method with backtracking
+(see \texttt{scripts/mnl\_utils.py}).
+Continuous features are $z$-scored before estimation; binary features stay
+in $\{0,1\}$. The reported coefficients are then transformed back to the
+\emph{raw} (un-standardised) scale so that the small datasets can be scored
+directly without any rescaling step.
 
-\subsection{Results}
+\paragraph{Estimated coefficients (raw scale).}
 \begin{center}
 \begin{tabular}{lr}
 \toprule
-Coefficient & Estimate (raw scale) \\
+Coefficient & Estimate \\
 \midrule
-intercept                    & $-2.8153$ \\
-prop\_starrating             & $+0.4761$ \\
-prop\_review\_score          & $+0.1199$ \\
-prop\_brand\_bool            & $+0.2299$ \\
-prop\_location\_score        & $+0.0163$ \\
-prop\_accesibility\_score    & $+0.5629$ \\
-prop\_log\_historical\_price & $-0.0374$ \\
-price\_usd                   & $-0.00732$ \\
-promotion\_flag              & $+0.4540$ \\
+$\beta_0$ (intercept)               & $-2.8153$ \\
+star rating                         & $+0.4761$ \\
+review score                        & $+0.1199$ \\
+brand indicator                     & $+0.2299$ \\
+location score                      & $+0.0163$ \\
+accessibility score                 & $+0.5629$ \\
+log historical price                & $-0.0374$ \\
+displayed price                     & $-0.00732$ \\
+promotion flag                      & $+0.4540$ \\
 \midrule
-final log-likelihood         & $-20\,611.33$ \\
-final gradient norm          & $1.22 \times 10^{-11}$ \\
-Newton iterations            & $6$ \\
+final log-likelihood                & $-20\,611.33$ \\
+final gradient norm                 & $1.22 \times 10^{-11}$ \\
+Newton iterations                   & $6$ \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\subsection{Commentary}
+\paragraph{Interpretation of every coefficient.}
+A coefficient $\beta_i$ measures how much one extra unit of feature $x_i$
+shifts the log-odds of choosing a hotel relative to the outside option.
+For binary features the size of the shift equals the coefficient itself
+(the feature flips by exactly one unit); for continuous features the
+shift is proportional to the unit of the feature.
 \begin{itemize}
-  \item \textbf{Price sensitivity} $\beta_{\text{price}} = -0.00732 < 0$ is
-    economically sensible: higher displayed price lowers choice probability.
-    This sign is essential for Problem 3 to have an interior optimum.
-  \item \textbf{Promotion} $\beta_{\text{promo}} = +0.454$: promoted hotels
-    are more likely to be chosen, as expected.
-  \item \textbf{Quality signals}: star rating, review score, brand, and
-    accessibility all have positive coefficients. Location score is
-    weakly positive.
-  \item \textbf{Historical price} is slightly negative ($-0.037$). Once the
-    displayed price and other quality attributes are controlled for, the
-    historical-price proxy no longer provides useful information and even
-    absorbs a small negative correlation. This is a joint-estimation
-    artefact rather than a sign that expensive historical hotels are
-    undesirable.
-  \item Final gradient norm is machine-precision small, so the Newton
-    method has converged to a stationary point of the (concave) MNL
-    log-likelihood. It is the global maximum.
+  \item \textbf{Intercept $\beta_0 = -2.8153$ (large negative).}
+    The baseline utility of a generic hotel is well below the outside
+    option's utility of $0$. Combined with the reasonable choice
+    probabilities we get on training queries, this says that customers
+    do \emph{not} book by default --- they need positive evidence
+    (good reviews, brand, promotion, etc.) to push utility above the
+    outside option. A near-zero intercept would have implied the average
+    hotel is already as attractive as not booking, which is not what we
+    see in the data ($\sim\!30\%$ of queries end without a booking).
+  \item \textbf{Star rating $+0.4761$ (large positive).}
+    A one-star jump (e.g.\ from $3\!\to\!4$) raises utility by about $0.48$,
+    multiplying $v_j$ by $e^{0.48}\approx 1.6$. A coefficient close to
+    zero would mean star rating does not drive choice; the value here
+    instead tells us star rating is one of the strongest signals.
+  \item \textbf{Review score $+0.1199$ (small positive).}
+    Each unit of review score (on a $0$--$5$ scale) raises utility by
+    only $\sim\!0.12$, which is modest. Once star rating is in the model,
+    review score adds little extra information --- the two are
+    correlated, and the joint estimation pushes most of the quality
+    signal onto star rating. This is a typical co-linear-feature
+    pattern, not evidence that reviews are unimportant in isolation.
+  \item \textbf{Brand indicator $+0.2299$ (medium positive).}
+    Branded hotels enjoy roughly a $0.23$ utility boost over independents,
+    multiplying $v_j$ by $e^{0.23}\approx 1.26$. Brand carries a real
+    booking premium, but smaller than star rating or promotion.
+  \item \textbf{Location score $+0.0163$ (near zero).}
+    Once star rating, brand, and accessibility are accounted for,
+    Expedia's location score barely moves the choice. The near-zero
+    coefficient indicates location is largely already proxied by the
+    other features and adds little marginal signal.
+  \item \textbf{Accessibility score $+0.5629$ (largest single positive).}
+    This is the strongest non-intercept positive coefficient. The
+    accessibility score has very small variance ($\sigma \approx 0.077$),
+    so a one-unit raw change is rare; on the standardised scale this
+    feature still has the second-largest effect. It captures something
+    about ease of access (transport, parking, etc.) that customers value
+    strongly.
+  \item \textbf{Log historical price $-0.0374$ (small negative).}
+    Slightly negative once displayed price and quality features are in
+    the model. The historical price proxy is highly correlated with
+    other quality signals, so its marginal effect after controlling for
+    them is small and absorbs a tiny negative residual. This is a
+    joint-estimation artefact rather than evidence that pricier-history
+    hotels are disliked.
+  \item \textbf{Displayed price $-0.00732$ (negative; large in dollar
+    terms).}
+    Per-dollar, the coefficient looks tiny, but prices typically span
+    \$50--\$500, so a \$100 price increase reduces utility by
+    $0.732$ ($v_j$ scaled by $e^{-0.732}\approx 0.48$, i.e.\ roughly
+    halved). In economic terms this is a large effect and is
+    \emph{the} essential ingredient for Problem~3 to have a finite
+    interior optimum --- a positive or near-zero $\beta_{\text{price}}$
+    would mean revenue increases without bound as we raise prices.
+  \item \textbf{Promotion flag $+0.4540$ (large positive).}
+    Promoted listings see their preference weight multiplied by
+    $e^{0.45}\approx 1.57$. This is essentially the same magnitude as
+    moving up one star and is the largest binary effect in the model:
+    customers click and book promoted hotels disproportionately, even
+    after price is controlled for.
 \end{itemize}
 
-\paragraph{Verification.}
-The uniform-choice baseline log-likelihood (every hotel and the outside
-option equally attractive within each query) is $-22\,856.21$.
-The fitted model improves on this baseline by $2\,244.88$ log-likelihood
-units, confirming that the fit is meaningful.
+\paragraph{Summary of magnitudes.}
+The strongest positive drivers of choice are accessibility, star rating,
+and promotion; the dominant negative driver is displayed price. Review
+score, brand, location, and historical price contribute smaller marginal
+signals, often because they are partially absorbed by correlated
+features. The negative intercept means the outside option is the
+default, which is consistent with the empirical query-level booking
+rate of $\sim 70\%$.
+
+\paragraph{Convergence.}
+Final gradient norm is at machine precision, so the (concave) MLE has
+converged to its global maximum. The uniform-choice baseline log-likelihood
+is $-22\,856.21$; the fitted model improves on that baseline by $2\,244.88$
+log-likelihood units, confirming that the fit is meaningful.
+
+\paragraph{Output of the code.}
+\begin{figure}[h!]
+  \centering
+  \fbox{\parbox{0.9\linewidth}{\centering
+    \vspace{2.5cm}
+    \emph{Screenshot placeholder: terminal output of} \texttt{python scripts/problem1\_mnl.py --output-json results/problem1\_results.json}.
+    \vspace{2.5cm}}}
+  \caption{Output produced when running the Problem~1 estimation script.}
+\end{figure}
+
+\FloatBarrier
+\newpage
 
 % =====================================================================
-\section{Problem 2: Assortment Optimization under MNL}
+\section*{Problem 2: Assortment Optimization under MNL}
 \label{sec:p2}
 
-\subsection{Problem Statement}
-Given the hotels in \texttt{dataX.csv}, choose a subset $S \subseteq \{1,\dots,n\}$
-to display so as to maximise the expected revenue
+Given the hotels in \texttt{dataX.csv}, choose a subset $S$ to display so as
+to maximise the expected revenue
 \[
 R(S) \;=\; \frac{\sum_{j \in S} p_j v_j}{1 + \sum_{j \in S} v_j},
+\qquad
+v_j \;=\; \exp(\hat u_j),
 \]
-where $v_j = \exp(\hat u_j)$ uses the Problem~1 coefficients.
+where $\hat u_j$ uses the Problem~1 raw-scale coefficients.
 
-\subsection{Structural Result}
-Under unconstrained MNL assortment optimization, the optimal set is
-\emph{revenue-ordered} (Talluri and van~Ryzin, 2004): there exists a
-price cutoff~$p^*$ such that
-\[
-S^* \;=\; \{\, j : p_j \ge p^* \,\}.
-\]
-Consequently the optimum is one of the $n$ nested prefixes obtained by
-sorting hotels in decreasing price order. This gives an $O(n \log n)$
-exact algorithm.
+\paragraph{Solution method.}
+Under unconstrained MNL assortment optimization, the optimum is
+\emph{revenue-ordered} (Talluri and van~Ryzin, 2004): there exists a price
+threshold $p^\star$ such that $S^* = \{j : p_j \ge p^\star\}$.
+Sorting hotels by displayed price in decreasing order and evaluating the
+revenue of every prefix therefore yields the exact optimum in
+$O(n \log n)$. The implementation is in
+\texttt{scripts/problem2\_assortment.py}.
 
-\subsection{Algorithm}
-Sort hotels by $p_j$ descending; for $k = 1,\dots,n$ compute the revenue of
-the $k$-th prefix; return the prefix with the largest revenue.
-
-\subsection{Results}
+\paragraph{Results.}
 \begin{center}
 \begin{tabular}{lrrl}
 \toprule
 Dataset & $|S^*|$ & $R(S^*)$ & $S^*$ (1-based indices) \\
 \midrule
-\texttt{data1.csv} & 18 & $107.3531$ & $\{1,2,3,4,5,6,7,13,16,18,19,20,21,22,23,24,25,27\}$ \\
-\texttt{data2.csv} & 10 & $131.1136$ & $\{1,2,7,8,9,10,11,22,24,26\}$ \\
-\texttt{data3.csv} & 18 & $121.0548$ & $\{1,2,3,4,5,6,8,9,11,12,14,15,16,17,19,20,24,25\}$ \\
-\texttt{data4.csv} & 11 & $97.4089$  & $\{4,5,7,9,11,16,19,20,21,22,27\}$ \\
+\texttt{data1.csv} & 18 & $107.35$ & $\{1,2,3,4,5,6,7,13,16,18,19,20,21,22,23,24,25,27\}$ \\
+\texttt{data2.csv} & 10 & $131.11$ & $\{1,2,7,8,9,10,11,22,24,26\}$ \\
+\texttt{data3.csv} & 18 & $121.05$ & $\{1,2,3,4,5,6,8,9,11,12,14,15,16,17,19,20,24,25\}$ \\
+\texttt{data4.csv} & 11 & $97.41$  & $\{4,5,7,9,11,16,19,20,21,22,27\}$ \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\paragraph{Verification.}
-For each returned assortment we check all single-item add/drop moves
-and confirm that no one-step modification increases revenue.
-This is consistent with the revenue-ordered theorem and with local
-optimality.
+\paragraph{Local check.}
+For every reported assortment we verified that no single-item add or drop
+improves revenue, consistent with the revenue-ordered theorem.
+
+\paragraph{Output of the code.}
+\begin{figure}[h!]
+  \centering
+  \fbox{\parbox{0.9\linewidth}{\centering
+    \vspace{2.5cm}
+    \emph{Screenshot placeholder: terminal output of} \texttt{python scripts/problem2\_assortment.py --problem1-json results/problem1\_results.json --output-json results/problem2\_results.json}.
+    \vspace{2.5cm}}}
+  \caption{Output produced when running the Problem~2 assortment script.}
+\end{figure}
+
+\FloatBarrier
+\newpage
 
 % =====================================================================
-\section{Problem 3: Pricing under MNL}
+\section*{Problem 3: Pricing under MNL}
 \label{sec:p3}
 
-\subsection{Problem Statement}
 Display all $n$ hotels in \texttt{dataX.csv} and choose new prices
-$p_1,\dots,p_n$ maximising
+$p_1,\dots,p_n$ to maximise
 \[
-R(p) \;=\; \frac{\sum_j p_j \, v_j(p_j)}{1 + \sum_j v_j(p_j)},
+R(p) \;=\; \frac{\sum_j p_j\, v_j(p_j)}{1 + \sum_j v_j(p_j)},
 \qquad
 v_j(p_j) \;=\; \exp\!\big(a_j + b\, p_j\big),
 \]
 where $a_j$ is the Problem-1 utility stripped of the price term and
 $b = \hat\beta_{\text{price}} = -0.00732 < 0$.
 
-\subsection{First-order Condition}
-Let $V = \sum_j v_j$ and $D = 1 + V$. Using $dv_j/dp_j = b\, v_j$,
+\paragraph{First-order condition: full derivation.}
+Introduce shorthand for the quantities that appear repeatedly:
+\[
+V(p) \;=\; \sum_{k=1}^{n} v_k(p_k),
+\qquad
+D(p) \;=\; 1 + V(p),
+\qquad
+N(p) \;=\; \sum_{k=1}^{n} p_k\, v_k(p_k),
+\]
+so that $R(p) = N(p) / D(p)$.
+
+\textit{Step 1: derivative of a single weight.}
+Because $v_k = \exp(a_k + b\, p_k)$ depends only on its own price,
+\[
+\frac{\partial v_k}{\partial p_j}
+  \;=\;
+  \begin{cases}
+    b\, v_j & \text{if } k = j, \\
+    0 & \text{otherwise}.
+  \end{cases}
+\]
+
+\textit{Step 2: derivative of $V$ and $D$.}
+Summing over $k$ kills every term except $k=j$,
+\[
+\frac{\partial V}{\partial p_j} \;=\; b\, v_j,
+\qquad
+\frac{\partial D}{\partial p_j} \;=\; \frac{\partial V}{\partial p_j} \;=\; b\, v_j.
+\]
+
+\textit{Step 3: derivative of the numerator $N$.}
+Only the $k=j$ term in $N = \sum_k p_k v_k$ depends on $p_j$ (both through
+the factor $p_k$ and through $v_k$). Apply the product rule to that term:
+\[
+\frac{\partial N}{\partial p_j}
+  \;=\;
+  \frac{\partial}{\partial p_j}\big(p_j v_j\big)
+  \;=\;
+  v_j \;+\; p_j \cdot b\, v_j
+  \;=\;
+  v_j\,(1 + b\, p_j).
+\]
+
+\textit{Step 4: quotient rule for $R = N/D$.}
 \[
 \frac{\partial R}{\partial p_j}
   \;=\;
-  \frac{\big(v_j + p_j b v_j\big) D - \Big(\sum_k p_k v_k\Big) b v_j}{D^2}
+  \frac{\dfrac{\partial N}{\partial p_j}\, D \;-\; N\, \dfrac{\partial D}{\partial p_j}}{D^{\,2}}
   \;=\;
-  \frac{v_j (1+V) \, \big[\, 1 + b p_j - b R \,\big]}{D^2}.
+  \frac{v_j(1+b\,p_j)\, D \;-\; N\, b\, v_j}{D^{\,2}}.
 \]
-Setting $\partial R/\partial p_j = 0$ and cancelling the positive factor
-$v_j (1+V)/D^2$ yields, for every $j$,
+Factor $v_j$ out of the numerator:
 \[
-\boxed{\; p_j \;=\; R + \tfrac{1}{|b|}. \;}
+\frac{\partial R}{\partial p_j}
+  \;=\;
+  \frac{v_j\,\big[\, (1 + b\, p_j)\, D \;-\; b\, N \,\big]}{D^{\,2}}.
 \]
-The right-hand side is independent of $j$, so \emph{every optimal price
-is the same}. Writing $p^* = R^* + 1/|b|$ and substituting back,
-the common optimum $(p^*, R^*)$ satisfies the fixed-point system
-\[
-p^* \;=\; R^* + \tfrac{1}{|b|},
-\qquad
-R^* \;=\; p^* \cdot \frac{\sum_j e^{a_j + b p^*}}{1 + \sum_j e^{a_j + b p^*}},
-\]
-which has a unique solution (Lambert-$W$ type).
 
-\subsection{Algorithm}
-Because the optimum is a scalar, we bracket the maximiser of
-$R(p, p, \dots, p)$ and refine it by golden-section search
+\textit{Step 5: substitute $N = R\, D$.}
+Since $R = N/D$ implies $N = R D$, we can replace $N$ in the bracket:
+\[
+(1 + b\, p_j)\, D \;-\; b\, N
+  \;=\;
+  (1 + b\, p_j)\, D \;-\; b\, R\, D
+  \;=\;
+  D\,\big[\, 1 + b\, p_j - b\, R \,\big].
+\]
+Therefore
+\[
+\frac{\partial R}{\partial p_j}
+  \;=\;
+  \frac{v_j\, D \,\big[\, 1 + b\, p_j - b\, R \,\big]}{D^{\,2}}
+  \;=\;
+  \frac{v_j\,\big[\, 1 + b\, (p_j - R) \,\big]}{D}.
+\]
+
+\textit{Step 6: setting the derivative to zero.}
+At an interior optimum we need $\partial R/\partial p_j = 0$ for every $j$.
+Since $v_j > 0$ and $D > 0$, the only way this can hold is
+\[
+1 + b\,(p_j - R) \;=\; 0
+\qquad\Longleftrightarrow\qquad
+p_j \;=\; R - \tfrac{1}{b}.
+\]
+With $b < 0$, $-1/b = 1/|b| > 0$, so we obtain the clean form
+\[
+\boxed{\;p_j^\star \;=\; R^\star + \tfrac{1}{|b|}.\;}
+\]
+
+\textit{Step 7: consequence.}
+The right-hand side does not depend on $j$. \emph{Every optimal price is
+identical.} Writing the common optimal price $p^\star$ and the resulting
+revenue $R^\star = R(p^\star,\dots,p^\star)$, the pair satisfies the
+implicit fixed-point system
+\[
+p^\star = R^\star + \tfrac{1}{|b|},
+\qquad
+R^\star = p^\star \cdot
+  \frac{\sum_j e^{a_j + b\, p^\star}}{1 + \sum_j e^{a_j + b\, p^\star}}.
+\]
+This system has a unique solution (it can be reduced to a transcendental
+equation of Lambert-$W$ type). Because the optimum is a single scalar,
+we solve it directly by golden-section search over $p$, which is exact
+under the model and not a relaxation
 (\texttt{scripts/problem3\_pricing.py}).
 
-\subsection{Results}
+\paragraph{Results.}
 \begin{center}
 \begin{tabular}{lrrr}
 \toprule
-Dataset & $p^*$ (USD) & Current $R$ & Optimal $R$ \\
+Dataset & $p^\star$ (USD) & Current $R$ & Optimal $R^\star$ \\
 \midrule
 \texttt{data1.csv} & $314.36$ & $104.65$ & $177.81$ \\
 \texttt{data2.csv} & $385.36$ & $113.36$ & $248.80$ \\
 \texttt{data3.csv} & $313.03$ & $118.17$ & $176.47$ \\
-\texttt{data4.csv} & $351.03$ & $78.69$  & $214.47$ \\
+\texttt{data4.csv} & $351.03$ & $\phantom{0}78.69$  & $214.47$ \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\paragraph{Numerical sanity check.}
-With $1/|b| = 136.56$, the identity $p^* - R^* = 1/|b|$ should hold for
-every dataset. For \texttt{data1}: $314.36 - 177.81 = 136.55$;
-for \texttt{data2}: $385.36 - 248.80 = 136.56$; and similarly for
-\texttt{data3}, \texttt{data4}. All four match $136.56$ to two decimals,
-confirming the fixed-point residual is essentially zero.
+\paragraph{Sanity check.}
+With $1/|b| = 136.56$, the identity $p^\star - R^\star = 1/|b|$ should hold
+on every dataset. For \texttt{data1.csv}: $314.36-177.81=136.55$;
+\texttt{data2.csv}: $385.36-248.80=136.56$; \texttt{data3.csv}:
+$313.03-176.47=136.56$; \texttt{data4.csv}: $351.03-214.47=136.56$.
+All four match $136.56$ to two decimals, confirming the solution.
 
-\subsection{Commentary}
-The identical optimal prices across hotels are a direct consequence of the
-\emph{single shared price coefficient} $\beta_{\text{price}}$ in the
-Problem~1 utility. Differentiated optimal prices would require a utility
-specification with hotel-specific or interacted price sensitivity, e.g.\
-$u_j = a_j + \beta_{\text{price}} (1 + \gamma\, \mathrm{brand}_j)\, p_j$,
-which is outside the model asked for. Under the fitted model the reported
-solution is exact.
+\paragraph{Why a single common price.}
+Identical optimal prices are a direct consequence of using \emph{one shared
+linear price coefficient} in Problem~1. Differentiated optimal prices would
+require a hotel-specific or interacted price sensitivity, which the
+assignment does not ask for. Under the fitted model the reported solution
+is exact.
+
+\paragraph{Output of the code.}
+\begin{figure}[h!]
+  \centering
+  \fbox{\parbox{0.9\linewidth}{\centering
+    \vspace{2.5cm}
+    \emph{Screenshot placeholder: terminal output of} \texttt{python scripts/problem3\_pricing.py --problem1-json results/problem1\_results.json --output-json results/problem3\_results.json}.
+    \vspace{2.5cm}}}
+  \caption{Output produced when running the Problem~3 pricing script.}
+\end{figure}
+
+\FloatBarrier
+\newpage
 
 % =====================================================================
-\section{Problem 4: Mixture of MNL (Early vs.\ Late)}
+\section*{Problem 4: Mixture of MNL}
 \label{sec:p4}
 
-\subsection{Model}
-Two customer types indexed by $k \in \{1,2\}$:
-type~1 = early (booking window $\ge 7$ days), type~2 = late
-(booking window $< 7$ days). Let $\theta_k$ be the share of type-$k$
-customers. For each type we fit a separate MNL with preference weights
-$v_{j,k} = \exp(\beta_{0k} + \sum_i \beta_{ik} x_{ji})$, and the mixture
-choice probability is
+We define two customer types from the booking window:
 \[
-\mathbb{P}(j \mid S) \;=\; \sum_{k=1}^{2} \theta_k \,
+\text{type 1 (early)} \iff \text{bw} \ge 7,
+\qquad
+\text{type 2 (late)}  \iff \text{bw} < 7,
+\]
+following the assignment instruction that "if the booking window is less
+than 7 days, we define it as a late booking and early otherwise."
+For each type $k \in \{1,2\}$ the per-type weights are
+\[
+v_{j,k} \;=\; \exp\!\Big(\beta_{0k} + \sum_{i=1}^{8} \beta_{ik}\, x_{ji}\Big),
+\]
+and the mixture choice probability is
+\[
+\mathbb{P}(j \mid S) \;=\; \sum_{k=1}^{2} \theta_k\,
   \frac{v_{j,k}}{1 + \sum_{p \in S} v_{p,k}}.
 \]
 
-\subsection{Estimating $\theta_1, \theta_2$}
-Because the type is observable from the booking window, we estimate the
-$\theta$'s by simple proportions of queries (customers, \emph{not} rows):
+\paragraph{Estimating $\theta_1, \theta_2$.}
+Because the type is observable, we estimate $\theta_k$ as the share of
+\emph{customers} (queries) of each type, not the share of rows:
 \[
 \hat\theta_1 \;=\; \frac{\#\{\text{queries with bw} \ge 7\}}{\#\text{queries}},
 \qquad
 \hat\theta_2 \;=\; 1 - \hat\theta_1.
 \]
-Shared scaling statistics (means, std.\ devs.) are used across both types
-so the coefficient estimates are directly comparable.
 
-\subsection{Results}
+\paragraph{Per-type MLE.}
+We then fit two MNLs with the same Newton procedure as Problem~1, but
+restricted to the queries of each type. To make the resulting coefficients
+directly comparable across the two types we use \emph{shared} feature scaling
+(common means and standard deviations).
+
+\paragraph{Results.}
 \begin{center}
 \begin{tabular}{lr}
 \toprule
@@ -320,132 +441,190 @@ $\hat\theta_2$ (late)  & $0.4569$ \\
 \begin{center}
 \begin{tabular}{lrrr}
 \toprule
-Coefficient (raw) & Early & Late & Early$-$Late \\
+Coefficient (raw) & Early & Late & Early $-$ Late \\
 \midrule
-intercept                    & $-2.9747$ & $-2.7096$ & $-0.265$ \\
-prop\_starrating             & $+0.4422$ & $+0.5399$ & $-0.098$ \\
-prop\_review\_score          & $+0.1374$ & $+0.1054$ & $+0.032$ \\
-prop\_brand\_bool            & $+0.2089$ & $+0.2561$ & $-0.047$ \\
-prop\_location\_score        & $-0.0159$ & $+0.0647$ & $-0.081$ \\
-prop\_accesibility\_score    & $+0.7496$ & $+0.3312$ & $+0.419$ \\
-prop\_log\_historical\_price & $-0.0531$ & $-0.0179$ & $-0.035$ \\
-price\_usd                   & $-0.00590$ & $-0.00934$ & $+0.00344$ \\
-promotion\_flag              & $+0.3829$ & $+0.5517$ & $-0.169$ \\
+intercept                    & $-2.9747$ & $-2.7096$ & $-0.265$  \\
+star rating                  & $+0.4422$ & $+0.5399$ & $-0.098$  \\
+review score                 & $+0.1374$ & $+0.1054$ & $+0.032$  \\
+brand                        & $+0.2089$ & $+0.2561$ & $-0.047$  \\
+location score               & $-0.0159$ & $+0.0647$ & $-0.081$  \\
+accessibility                & $+0.7496$ & $+0.3312$ & $+0.419$  \\
+log historical price         & $-0.0531$ & $-0.0179$ & $-0.035$  \\
+displayed price              & $-0.00590$ & $-0.00934$ & $+0.00344$ \\
+promotion                    & $+0.3829$ & $+0.5517$ & $-0.169$  \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-Both per-type log-likelihoods converged to machine precision
-(gradient norms $3.2\times 10^{-9}$ and $1.2\times 10^{-9}$).
+Both per-type log-likelihoods converged (gradient norms
+$3.2\!\times\!10^{-9}$ and $1.2\!\times\!10^{-9}$).
 
-\subsection{Commentary}
+\paragraph{Interpretation of every coefficient.}
+We compare the early-booker and late-booker estimates feature by feature.
+Differences below the $10^{-2}$ scale are essentially noise; the
+substantive movements are in price, promotion, accessibility, location,
+and the intercept.
 \begin{itemize}
-  \item \textbf{Late customers are more price sensitive}
-    ($-0.00934$ vs.\ $-0.00590$). Last-minute travellers are more
-    value-conscious, whereas early planners tolerate higher prices.
-  \item \textbf{Late customers respond more strongly to promotions}
-    ($+0.552$ vs.\ $+0.383$) and to star rating, consistent with a more
-    deal-seeking mindset.
-  \item \textbf{Early customers value accessibility more}
-    ($+0.750$ vs.\ $+0.331$). Travellers booking far in advance often
-    care about convenience, whereas last-minute bookers optimise price.
-  \item Both types reject high displayed price and reward promotions,
-    so the qualitative structure is preserved across segments.
+  \item \textbf{Intercept: early $-2.97$, late $-2.71$.}
+    Both are large negatives, so the outside option is the default for
+    both segments. The late intercept is somewhat less negative
+    ($+0.27$ relative), meaning that holding all features at zero a
+    late booker is closer to the booking margin than an early booker.
+    This is consistent with the empirical fact that late bookers have
+    a higher booking rate per query in the data.
+  \item \textbf{Star rating: early $+0.44$, late $+0.54$.}
+    Both segments value star rating, but late bookers value it
+    \emph{more}. A late booker bumping a hotel from 3 to 4 stars sees
+    $v_j$ multiplied by $e^{0.54}\approx 1.72$, vs.\ $1.55$ for an
+    early booker. Possible interpretation: under time pressure, late
+    bookers fall back on visible quality signals.
+  \item \textbf{Review score: early $+0.14$, late $+0.11$.}
+    Both small positives. Early bookers weigh review score slightly
+    more, consistent with having time to read reviews; late bookers
+    rely a touch more on the cruder star rating signal. The gap is
+    small ($\sim\!0.03$), so this is a mild effect.
+  \item \textbf{Brand: early $+0.21$, late $+0.26$.}
+    Late bookers place a slightly larger premium on branded hotels
+    ($e^{0.26}\approx 1.29$ vs.\ $1.23$). Brand functions as a
+    risk-reducing heuristic when search time is short.
+  \item \textbf{Location score: early $-0.016$, late $+0.065$.}
+    A meaningful sign flip: early bookers' coefficient is essentially
+    zero (or weakly negative once correlated features are partialled
+    out), while late bookers reward better-located hotels modestly.
+    Late bookers presumably care about getting straight to the
+    destination, while early planners can substitute location for
+    other amenities.
+  \item \textbf{Accessibility: early $+0.75$, late $+0.33$.}
+    The largest difference between the two segments. Early bookers
+    weight accessibility more than \emph{twice} as heavily as late
+    bookers. Travelers who plan ahead seem to prefer
+    transit-/parking-accessible hotels, while last-minute bookers
+    accept a worse access score.
+  \item \textbf{Log historical price: early $-0.053$, late $-0.018$.}
+    Both small and negative. Early bookers penalise historically
+    expensive hotels slightly more. As in Problem~1, this feature is
+    largely absorbed by displayed price and quality features, so the
+    effect is residual.
+  \item \textbf{Displayed price: early $-0.00590$, late $-0.00934$.}
+    Late bookers are about $1.6\times$ more price sensitive. A
+    \$100 price increase costs an early booker $0.59$ utility points
+    ($v_j$ scaled by $e^{-0.59}\approx 0.55$); the same increase costs
+    a late booker $0.93$ points ($v_j$ scaled by $0.39$). This is the
+    most policy-relevant difference between the two segments and
+    drives the divergence in optimal pricing.
+  \item \textbf{Promotion: early $+0.38$, late $+0.55$.}
+    Late bookers respond markedly more to promotions. Combined with
+    higher price sensitivity, this paints a clear picture: late bookers
+    are deal-seekers. The promotion effect for them is comparable to
+    a one-star upgrade.
 \end{itemize}
+
+\paragraph{Summary.}
+The biggest segment-level differences are: late bookers are more price
+sensitive and more promo-responsive (a deal-seeking profile), while early
+bookers care more about accessibility and slightly more about review
+content (a planning profile). All other coefficient differences are
+small and qualitatively consistent with the same overall ranking of
+attributes.
+
+\paragraph{Output of the code.}
+\begin{figure}[h!]
+  \centering
+  \fbox{\parbox{0.9\linewidth}{\centering
+    \vspace{2.5cm}
+    \emph{Screenshot placeholder: terminal output of} \texttt{python scripts/problem4\_mixture.py --output-json results/problem4\_results.json}.
+    \vspace{2.5cm}}}
+  \caption{Output produced when running the Problem~4 mixture-of-MNL script.}
+\end{figure}
+
+\FloatBarrier
+\newpage
 
 % =====================================================================
-\section{Problem 5: Early vs.\ Late Assortment Optimization}
+\section*{Problem 5: Early vs.\ Late Reservations}
 \label{sec:p5}
 
-For each small dataset we compute
-\begin{itemize}
-  \item $S$: optimum with \emph{unknown} arriving customer type
-    (maximises mixture revenue),
-  \item $S_1$: optimum if the customer is known to be type~1 (early),
-  \item $S_2$: optimum if the customer is known to be type~2 (late).
-\end{itemize}
-
-\subsection{Type-aware Sub-problems}
-Each of $S_1$ and $S_2$ is a single-class MNL assortment, so the
-revenue-ordered theorem applies and we reuse the Problem-2 algorithm.
-
-\subsection{Unknown Type: Mixed-Integer Program}
-For unknown type we solve
+For each small dataset we compute three assortments:
 \[
-\max_{S \subseteq \{1,\dots,n\}}
-  \; \theta_1 \frac{\sum_{j \in S} p_j v_{j,1}}{1 + \sum_{j \in S} v_{j,1}}
-  + \theta_2 \frac{\sum_{j \in S} p_j v_{j,2}}{1 + \sum_{j \in S} v_{j,2}}.
+S \;=\; \arg\max_S \big[\theta_1 R_1(S) + \theta_2 R_2(S)\big],
+\qquad
+S_1 \;=\; \arg\max_S R_1(S),
+\qquad
+S_2 \;=\; \arg\max_S R_2(S),
 \]
-This is a sum of \emph{fractional} objectives in the binary selection, so
-it is not revenue-ordered in general. We give the exact MILP
-reformulation that was implemented and solved.
+where $R_k(S) = \big(\sum_{j \in S} p_j v_{j,k}\big) / \big(1 + \sum_{j \in S} v_{j,k}\big)$.
 
-\paragraph{Decision variables.}
+\paragraph{Type-aware sub-problems $S_1, S_2$.}
+Each is a single-class MNL assortment problem, so the revenue-ordered
+theorem from Problem~2 applies directly.
+
+\paragraph{Unknown-type problem $S$: integer program.}
+The mixture objective is a sum of two fractional functions in the
+binary selection vector, hence not revenue-ordered in general. The
+assignment explicitly says "you need to solve an integer program here to
+compute $S$." Our exact MILP formulation is below.
+
+\medskip
+\noindent\textbf{Decision variables}
 \begin{tabular}{ll}
-$x_j \in \{0,1\}$            & $1$ if hotel $j$ is offered in $S$, \\
-$t_k \ge 0$, $k \in \{1,2\}$ & auxiliary variables linearising $1/(1+\sum_j v_{j,k} x_j)$, \\
-$s_{j,k} \ge 0$              & McCormick product linearisation of $t_k \cdot x_j$.
+$x_j \in \{0,1\}$            & 1 if hotel $j$ is included in $S$, \\
+$t_k \ge 0$, $k \in \{1,2\}$ & auxiliary variable equal to $1/(1+\sum_j v_{j,k} x_j)$, \\
+$s_{j,k} \ge 0$              & McCormick linearisation of $t_k \cdot x_j$.
 \end{tabular}
 
-\paragraph{Objective.}
+\medskip
+\noindent\textbf{Objective}
 \[
-\max \;\; \sum_{j=1}^{n} \Big[
-   \theta_1 \, p_j \, v_{j,1} \, s_{j,1}
- + \theta_2 \, p_j \, v_{j,2} \, s_{j,2} \Big].
+\max\;\; \sum_{j=1}^{n}\!\Big[
+   \theta_1\, p_j\, v_{j,1}\, s_{j,1} +
+   \theta_2\, p_j\, v_{j,2}\, s_{j,2}
+\Big].
 \]
 
-\paragraph{Normalisation constraints} (tie $t_k$ to the assortment):
+\noindent\textbf{Normalisation constraints} (tie $t_k$ to $x$):
 \[
 t_k + \sum_{j=1}^{n} v_{j,k}\, s_{j,k} \;=\; 1, \qquad k \in \{1,2\}.
 \]
 
-\paragraph{McCormick envelopes} for $s_{j,k} = t_k \cdot x_j$ with
-$x_j \in \{0,1\}$ and $t_k \in [0,1]$, for all $j$ and $k$:
+\noindent\textbf{McCormick envelopes} for $s_{j,k} = t_k\cdot x_j$ with
+$x_j \in \{0,1\}$ and $t_k \in [0,1]$:
 \[
 s_{j,k} \le t_k, \qquad
 s_{j,k} \le x_j, \qquad
 s_{j,k} \ge t_k + x_j - 1, \qquad
 s_{j,k} \ge 0.
 \]
+Because $x_j$ is binary, the envelope is tight: at every integer feasible
+solution we have $s_{j,k} = t_k\, x_j$ exactly, and the objective collapses
+to the original mixture revenue. The MILP is therefore an \emph{exact
+reformulation}, not a relaxation.
 
-\paragraph{Bounds.}
-\[
-0 \le t_k \le 1, \qquad 0 \le s_{j,k} \le 1, \qquad x_j \in \{0,1\}.
-\]
+\paragraph{Solver.}
+The MILP is solved with Gurobi (\texttt{gurobi\_cl}) on an LP file produced
+by \texttt{scripts/problem5\_assortment.py}. A branch-and-bound fallback in
+the same script solves the same problem exactly without Gurobi and is used
+to cross-validate the MILP solution.
 
-\paragraph{Exactness.} Because $x_j$ is binary, the McCormick envelope is
-tight: at every integer feasible solution $s_{j,k} = t_k\, x_j$ exactly,
-the normalisation forces $t_k = 1/(1 + \sum_j v_{j,k} x_j)$, and the
-objective collapses to the original mixture revenue.
-Therefore the MILP is an \emph{exact reformulation}, not a relaxation.
-
-\subsection{Algorithm}
-The MILP is solved by \texttt{gurobi\_cl} on an LP file produced by
-\texttt{scripts/problem5\_assortment.py}. A branch-and-bound fallback
-solving the same problem exactly is also available for environments
-without Gurobi; it uses the segment-wise best-completion bound for pruning
-and is used to cross-validate Gurobi's solution.
-
-\subsection{Results}
+\paragraph{Results (revenues evaluated under the early and late MNLs).}
 \begin{center}
 \begin{tabular}{lllrrr}
 \toprule
 Dataset & Set & Indices & $|\cdot|$ & $R_1$ & $R_2$ \\
 \midrule
 \multirow{3}{*}{\texttt{data1.csv}}
- & $S$   & $\{1,2,3,4,5,6,7,13,16,18,19,20,21,22,23,24,25,27\}$ & 18 & $103.25$ & $112.12$ \\
+ & $S$   & $\{1,2,3,4,5,6,7,13,16,18,19,20,21,22,23,24,25,27\}$         & 18 & $103.25$ & $112.12$ \\
  & $S_1$ & $\{1,2,3,4,5,6,7,10,13,15,16,17,18,19,20,21,22,23,24,25,27\}$ & 21 & $103.47$ & $111.76$ \\
- & $S_2$ & $\{1,2,3,4,5,6,7,16,18,19,20,21,22,23,24,25\}$ & 16 & $102.51$ & $112.22$ \\
+ & $S_2$ & $\{1,2,3,4,5,6,7,16,18,19,20,21,22,23,24,25\}$                & 16 & $102.51$ & $112.22$ \\
 \midrule
 \multirow{3}{*}{\texttt{data2.csv}}
- & $S$   & $\{1,2,7,8,9,10,11,22,24,26\}$                & 10 & $126.92$ & $136.46$ \\
- & $S_1$ & $\{1,2,7,8,9,10,11,22,24,26\}$                & 10 & $126.92$ & $136.46$ \\
- & $S_2$ & $\{1,2,7,8,9,11,22\}$                          &  7 & $123.85$ & $137.38$ \\
+ & $S$   & $\{1,2,7,8,9,10,11,22,24,26\}$ & 10 & $126.92$ & $136.46$ \\
+ & $S_1$ & $\{1,2,7,8,9,10,11,22,24,26\}$ & 10 & $126.92$ & $136.46$ \\
+ & $S_2$ & $\{1,2,7,8,9,11,22\}$           &  7 & $123.85$ & $137.38$ \\
 \midrule
 \multirow{3}{*}{\texttt{data3.csv}}
- & $S$   & $\{1,2,3,4,5,6,8,9,11,12,14,15,16,17,19,20,24,25\}$ & 18 & $117.44$ & $125.23$ \\
+ & $S$   & $\{1,2,3,4,5,6,8,9,11,12,14,15,16,17,19,20,24,25\}$    & 18 & $117.44$ & $125.23$ \\
  & $S_1$ & $\{1,2,3,4,5,6,8,9,11,12,14,15,16,17,19,20,24,25,26\}$ & 19 & $117.52$ & $125.04$ \\
- & $S_2$ & $\{1,2,3,4,5,6,8,9,11,12,14,15,16,17,20,24,25\}$ & 17 & $117.19$ & $125.35$ \\
+ & $S_2$ & $\{1,2,3,4,5,6,8,9,11,12,14,15,16,17,20,24,25\}$       & 17 & $117.19$ & $125.35$ \\
 \midrule
 \multirow{3}{*}{\texttt{data4.csv}}
  & $S$   & $\{4,5,7,9,11,16,19,20,21,22,27\}$ & 11 & $94.70$ & $100.58$ \\
@@ -455,19 +634,11 @@ Dataset & Set & Indices & $|\cdot|$ & $R_1$ & $R_2$ \\
 \end{tabular}
 \end{center}
 
-\noindent
-$R_1$ denotes expected revenue under the early (type-1) MNL;
-$R_2$ denotes expected revenue under the late (type-2) MNL.
-
-\subsection{Comparison and Value of Knowing the Customer Type}
-For each dataset we report the gain from knowing the type of an arriving
-customer: $R_1(S_1) - R_1(S)$ under type~1 and $R_2(S_2) - R_2(S)$ under
-type~2.
-
+\paragraph{Comparing the unknown-type set against the type-aware sets.}
 \begin{center}
 \begin{tabular}{lrr}
 \toprule
-Dataset & $\Delta_1 = R_1(S_1) - R_1(S)$ & $\Delta_2 = R_2(S_2) - R_2(S)$ \\
+Dataset & $R_1(S_1) - R_1(S)$ & $R_2(S_2) - R_2(S)$ \\
 \midrule
 \texttt{data1.csv} & $+0.218$ & $+0.102$ \\
 \texttt{data2.csv} & $\phantom{+}0.000$ & $+0.919$ \\
@@ -477,35 +648,49 @@ Dataset & $\Delta_1 = R_1(S_1) - R_1(S)$ & $\Delta_2 = R_2(S_2) - R_2(S)$ \\
 \end{tabular}
 \end{center}
 
-All values of information are non-negative (as they must be, since $S_k$
-maximises $R_k$ by definition and $S$ is feasible for that sub-problem).
-Some are exactly zero: on \texttt{data2} and \texttt{data4} the
-unknown-type optimum coincides with $S_1$, so knowing the customer is
-type~1 brings no extra revenue on those datasets.
+All gains are non-negative, as required: $S_k$ is the unconstrained maximiser
+of $R_k$, so $R_k(S_k) \ge R_k(S)$. On \texttt{data2.csv} and
+\texttt{data4.csv} the unknown-type optimum coincides with $S_1$, so knowing
+that the customer is type~1 brings no extra revenue. The biggest payoff
+from knowing the type is on \texttt{data2.csv} for type~2 ($+0.919$).
 
-\subsection{Cross-Validation of the Two Solvers}
-Running the explicit Gurobi MILP and the in-house branch-and-bound
-fallback on all four datasets yields \emph{identical} selected sets and
-mixture revenues (floating-point difference $<3\times 10^{-14}$).
-The two solvers certify each other, which is strong evidence that
-$S$ is globally optimal in each case.
+\paragraph{Cross-validation.}
+The Gurobi MILP and the branch-and-bound fallback return identical
+$S$ and identical mixture revenue on all four datasets (floating-point
+difference $<3\!\times\!10^{-14}$).
+
+\paragraph{Output of the code.}
+\begin{figure}[h!]
+  \centering
+  \fbox{\parbox{0.9\linewidth}{\centering
+    \vspace{2.5cm}
+    \emph{Screenshot placeholder: terminal output of} \texttt{python scripts/problem5\_assortment.py --problem4-json results/problem4\_results.json --use-gurobi --output-json results/problem5\_results\_gurobi.json}.
+    \vspace{2.5cm}}}
+  \caption{Output produced when running the Problem~5 assortment script (MILP backend).}
+\end{figure}
+
+\FloatBarrier
+\newpage
 
 % =====================================================================
-\section{Problem 6: MMNL with Family vs.\ Non-family Segmentation}
+\section*{Problem 6: Mixture of MNL with Other Ways of Defining Customer Types}
 \label{sec:p6}
 
-\subsection{Chosen Segmentation}
-We redefine customer types using \texttt{srch\_children\_count}:
+\paragraph{Chosen segmentation.}
+Instead of the booking-window cut from Problem~4, we segment by whether the
+customer is travelling with children, using the column
+\texttt{srch\_children\_count}:
 \[
 \text{type 1 (family)} \iff \texttt{srch\_children\_count} > 0,
 \qquad
 \text{type 2 (non-family)} \iff \texttt{srch\_children\_count} = 0.
 \]
-This captures a different demand structure than the booking-window cut:
-families are more likely to be multi-guest leisure bookings, while
-non-family queries mix solo and couple travellers.
+Families and non-families plausibly weigh hotel attributes very differently
+(space, brand reliability, accessibility), and the share of family bookings
+($\sim\!22\%$) gives a clear minority/majority structure to compare against
+Problem~5.
 
-\subsection{Estimated $\theta$ and Coefficients}
+\paragraph{Estimated shares and per-type coefficients.}
 \begin{center}
 \begin{tabular}{lr}
 \toprule
@@ -518,44 +703,44 @@ $\hat\theta_2$ (non-family) & $0.7754$ \\
 \begin{center}
 \begin{tabular}{lrrr}
 \toprule
-Coefficient (raw) & Family & Non-family & Family$-$Non-family \\
+Coefficient (raw) & Family & Non-family & Family $-$ Non-family \\
 \midrule
-intercept                    & $-2.6686$ & $-2.8934$ & $+0.225$ \\
-prop\_starrating             & $+0.3532$ & $+0.5192$ & $-0.166$ \\
-prop\_review\_score          & $+0.1154$ & $+0.1236$ & $-0.008$ \\
-prop\_brand\_bool            & $+0.3062$ & $+0.2142$ & $+0.092$ \\
-prop\_location\_score        & $+0.0188$ & $+0.0155$ & $+0.003$ \\
-prop\_accesibility\_score    & $+0.5193$ & $+0.5677$ & $-0.048$ \\
-prop\_log\_historical\_price & $-0.0825$ & $-0.0189$ & $-0.064$ \\
-price\_usd                   & $-0.00376$ & $-0.00860$ & $+0.00484$ \\
-promotion\_flag              & $+0.4873$ & $+0.4408$ & $+0.047$ \\
+intercept                    & $-2.6686$ & $-2.8934$ & $+0.225$  \\
+star rating                  & $+0.3532$ & $+0.5192$ & $-0.166$  \\
+review score                 & $+0.1154$ & $+0.1236$ & $-0.008$  \\
+brand                        & $+0.3062$ & $+0.2142$ & $+0.092$  \\
+location score               & $+0.0188$ & $+0.0155$ & $+0.003$  \\
+accessibility                & $+0.5193$ & $+0.5677$ & $-0.048$  \\
+log historical price         & $-0.0825$ & $-0.0189$ & $-0.064$  \\
+displayed price              & $-0.00376$ & $-0.00860$ & $+0.00484$ \\
+promotion                    & $+0.4873$ & $+0.4408$ & $+0.047$  \\
 \bottomrule
 \end{tabular}
 \end{center}
 
-\paragraph{Convergence note.} The family model converged with gradient
-norm $3.3\times 10^{-5}$ and stable log-likelihood across the last four
-iterations (changes below $10^{-8}$); the non-family model converged to
-$1.8\times 10^{-11}$. Both are effectively at their stationary point.
+The non-family model converges to gradient norm
+$1.8\!\times\!10^{-11}$; the family model reaches $3.3\!\times\!10^{-5}$
+with stable log-likelihood across the last four iterations
+(changes below $10^{-8}$). Both are at their stationary point.
 
-\subsection{Commentary}
+\paragraph{Comments on the two types.}
 \begin{itemize}
-  \item \textbf{Non-family customers are roughly $2.3\times$ more
-    price-sensitive} than families ($-0.00860$ vs.\ $-0.00376$).
-    One plausible interpretation: families have a smaller set of
-    acceptable hotels (space, amenities) and shop less on price, while
-    solo/couple travellers can substitute more freely.
-  \item \textbf{Families value brand more} ($+0.306$ vs.\ $+0.214$) and
-    respond \textbf{more strongly to promotions} ($+0.487$ vs.\ $+0.441$).
-    Both are consistent with the story above.
-  \item \textbf{Non-family customers reward star rating more},
-    suggesting leisure couples and solo travellers trade up on quality
-    once price is controlled for.
+  \item Non-family customers are about $2.3\times$ more price-sensitive
+    than families. Families likely have a tighter set of acceptable hotels
+    (rooms, amenities) and shop less on price.
+  \item Families value brand more strongly ($+0.306$ vs.\ $+0.214$) and
+    respond more to promotions, consistent with risk-averse leisure
+    bookers.
+  \item Non-family customers reward star rating more, suggesting that
+    couples and solo travellers trade up on quality once price is
+    controlled for.
 \end{itemize}
 
-\subsection{Assortment Results}
-The unknown-type problem is solved with the same exact branch-and-bound
-used in Problem~5, now against the family/non-family mixture.
+\paragraph{Repeat of Problem 5 under this segmentation.}
+We re-run the Problem~5 procedure with $\theta_1, \theta_2$ and the
+per-type weights coming from the family/non-family fit. The unknown-type
+problem is solved by the same exact branch-and-bound code as in Problem~5
+(\texttt{scripts/problem\_6\_mmnl\_other.py}).
 
 \begin{center}
 \begin{tabular}{lllrrr}
@@ -563,9 +748,9 @@ used in Problem~5, now against the family/non-family mixture.
 Dataset & Set & Indices & $|\cdot|$ & $R_{\text{fam}}$ & $R_{\text{nf}}$ \\
 \midrule
 \multirow{3}{*}{\texttt{data1.csv}}
- & $S$   & $\{1,2,3,4,5,6,7,13,16,18,19,20,21,22,23,24,25,27\}$          & 18 & $108.58$ & $106.97$ \\
- & $S_1$ & $\{1,2,3,4,5,6,7,16,18,19,20,21,22,23,24,25,27\}$             & 17 & $108.60$ & $106.95$ \\
- & $S_2$ & $\{1,2,3,4,5,6,7,10,13,15,16,18,19,20,21,22,23,24,25,27\}$    & 20 & $108.50$ & $106.97$ \\
+ & $S$   & $\{1,2,3,4,5,6,7,13,16,18,19,20,21,22,23,24,25,27\}$       & 18 & $108.58$ & $106.97$ \\
+ & $S_1$ & $\{1,2,3,4,5,6,7,16,18,19,20,21,22,23,24,25,27\}$          & 17 & $108.60$ & $106.95$ \\
+ & $S_2$ & $\{1,2,3,4,5,6,7,10,13,15,16,18,19,20,21,22,23,24,25,27\}$ & 20 & $108.50$ & $106.97$ \\
 \midrule
 \multirow{3}{*}{\texttt{data2.csv}}
  & $S$   & $\{1,2,7,8,9,10,11,22,24,26\}$ & 10 & $139.61$ & $127.85$ \\
@@ -573,9 +758,9 @@ Dataset & Set & Indices & $|\cdot|$ & $R_{\text{fam}}$ & $R_{\text{nf}}$ \\
  & $S_2$ & $\{1,2,7,8,9,10,11,22,24,26\}$ & 10 & $139.61$ & $127.85$ \\
 \midrule
 \multirow{3}{*}{\texttt{data3.csv}}
- & $S$   & $\{1,2,3,4,5,6,8,9,11,12,14,15,16,17,19,20,24,25\}$           & 18 & $129.91$ & $118.70$ \\
- & $S_1$ & $\{1,2,3,4,5,6,8,11,14,15,16,17,20,24,25\}$                    & 15 & $130.34$ & $117.78$ \\
- & $S_2$ & $\{1,2,3,4,5,6,8,9,11,12,14,15,16,17,19,20,24,25,26\}$        & 19 & $129.58$ & $118.74$ \\
+ & $S$   & $\{1,2,3,4,5,6,8,9,11,12,14,15,16,17,19,20,24,25\}$    & 18 & $129.91$ & $118.70$ \\
+ & $S_1$ & $\{1,2,3,4,5,6,8,11,14,15,16,17,20,24,25\}$            & 15 & $130.34$ & $117.78$ \\
+ & $S_2$ & $\{1,2,3,4,5,6,8,9,11,12,14,15,16,17,19,20,24,25,26\}$ & 19 & $129.58$ & $118.74$ \\
 \midrule
 \multirow{3}{*}{\texttt{data4.csv}}
  & $S$   & $\{4,5,7,9,11,16,19,20,21,22,27\}$ & 11 & $102.12$ & $95.42$ \\
@@ -588,7 +773,7 @@ Dataset & Set & Indices & $|\cdot|$ & $R_{\text{fam}}$ & $R_{\text{nf}}$ \\
 \begin{center}
 \begin{tabular}{lrr}
 \toprule
-Dataset & $\Delta_1 = R_{\text{fam}}(S_1) - R_{\text{fam}}(S)$ & $\Delta_2 = R_{\text{nf}}(S_2) - R_{\text{nf}}(S)$ \\
+Dataset & $R_{\text{fam}}(S_1) - R_{\text{fam}}(S)$ & $R_{\text{nf}}(S_2) - R_{\text{nf}}(S)$ \\
 \midrule
 \texttt{data1.csv} & $+0.012$ & $+0.001$ \\
 \texttt{data2.csv} & $+1.951$ & $\phantom{+}0.000$ \\
@@ -598,52 +783,130 @@ Dataset & $\Delta_1 = R_{\text{fam}}(S_1) - R_{\text{fam}}(S)$ & $\Delta_2 = R_{
 \end{tabular}
 \end{center}
 
-All values of information are non-negative, as required. On \texttt{data2}
-the value of knowing the customer is a family is sizeable ($+1.95$),
-because $S_1$ offers the short luxury prefix $\{1,2,7,8,9,11,22\}$ rather
-than the wider set that maximises the blended mixture objective.
+\paragraph{Discussion.}
+All gains are non-negative, as expected. The unknown-type assortment
+$S$ in this segmentation often coincides with the one from Problem~5
+(see e.g.\ \texttt{data1.csv} and \texttt{data4.csv}): the underlying
+revenue-ordered structure of the small datasets is robust to changing
+how customers are split. The largest information value
+($+1.95$ on \texttt{data2.csv}) comes from telling the firm that the
+customer is a family --- the family model prefers a much shorter luxury
+prefix $\{1,2,7,8,9,11,22\}$ than the blended optimum.
 
-\subsection{Observations}
-\begin{itemize}
-  \item The unknown-type assortments $S$ in Problems 5 and 6 often
-    coincide exactly (e.g.\ \texttt{data1.csv}, \texttt{data4.csv}), because
-    the revenue-ordered structure of the underlying small datasets is
-    robust to the particular segmentation used: both segmentations keep
-    roughly the same prefix of high-price hotels.
-  \item The family/non-family split is \emph{less informative} than the
-    early/late split in the sense that most values of knowing the type
-    are near zero on Problem~6, except on \texttt{data2} for the family
-    segment. This suggests the family/non-family cut produces two groups
-    that agree more on ranking than the booking-window cut does.
-\end{itemize}
+\paragraph{Output of the code.}
+\begin{figure}[h!]
+  \centering
+  \fbox{\parbox{0.9\linewidth}{\centering
+    \vspace{2.5cm}
+    \emph{Screenshot placeholder: terminal output of} \texttt{python scripts/problem\_6\_mmnl\_other.py --output-json results/problem6\_results.json}.
+    \vspace{2.5cm}}}
+  \caption{Output produced when running the Problem~6 family/non-family script.}
+\end{figure}
+
+\FloatBarrier
+\newpage
 
 % =====================================================================
-\section{Summary}
-\label{sec:summary}
+\section*{Problem 7: AI Agents as Customers}
+\label{sec:p7}
 
-\begin{itemize}
-  \item Problem~1: MNL fitted cleanly, all coefficient signs economically
-    sensible, final gradient norm $\approx 10^{-11}$.
-  \item Problem~2: revenue-ordered theorem applies; optimum computed in
-    closed form for all four small datasets.
-  \item Problem~3: with a single shared price coefficient, all optimal
-    prices must be equal; the derivation is explicit and the numerical
-    residual $p^* - R^* - 1/|b|$ is essentially zero on every dataset.
-  \item Problem~4: query-level $\theta$ estimates and segment-specific
-    MNL fits converge; late customers are more price-sensitive,
-    early customers more sensitive to accessibility.
-  \item Problem~5: type-aware problems use the revenue-ordered theorem;
-    the unknown-type problem is formulated as an exact MILP and solved by
-    Gurobi, with a branch-and-bound fallback. The two solvers return
-    identical solutions on all four datasets.
-  \item Problem~6: family/non-family segmentation produces qualitatively
-    different sensitivities (non-family more price-sensitive) and
-    assortments that are close to but not equal to those in Problem~5.
-    Values of information are non-negative across datasets.
-\end{itemize}
+\paragraph{Approach.}
+We take \texttt{data.csv} and remove the booking column, then for each
+search query we present the hotel attributes and customer context to an
+AI agent and ask it to make a single choice (one of the displayed hotels
+or NO\_PURCHASE). The AI-generated choices replace the original booking
+column, and we re-estimate the MNL of Problem~1 on this AI-generated
+dataset. We then use the AI agent as a held-out predictor: it is given a
+small set of labeled context examples and asked to predict booking
+decisions on held-out queries, and its accuracy is compared with the MNL
+estimated in Problem~1.
 
-\paragraph{Reproducibility.}
-All scripts default to seed \texttt{5132} and are deterministic.
-See \texttt{README.md} for the exact commands.
+\paragraph{AI agent and prompt.}
+We use ChatGPT (model: \texttt{<fill in version>}). Each query is sent
+with a prompt that
+\begin{enumerate}[nosep]
+  \item describes the eight hotel attributes in plain language,
+  \item lists the customer context (booking window, adults, children,
+        rooms, Saturday-night flag),
+  \item asks for exactly one choice: a hotel \texttt{row\_id}
+        or \texttt{NO\_PURCHASE},
+  \item requires JSON-formatted output for downstream parsing.
+\end{enumerate}
+
+\paragraph{Re-estimated MNL on AI-generated bookings.}
+\emph{To be filled in once the AI labelling pass and re-estimation are run:}
+report the AI MNL coefficients, place them next to the human MNL of
+Problem~1 in a side-by-side table, and comment on signs and magnitudes.
+
+\paragraph{Held-out predictive comparison.}
+\emph{To be filled in:} state the train/test split (queries, not rows),
+report the metric (e.g.\ query-level top-1 accuracy: a prediction is correct
+iff the chosen hotel matches the booked hotel, or
+\texttt{NO\_PURCHASE} is predicted on a no-booking query), and report the
+two numbers (AI accuracy and MNL accuracy) on the same held-out set.
+
+\paragraph{Discussion.}
+\emph{To be filled in:} summarise how close the AI's choices are to human
+behaviour, both in coefficient signs (alignment of preferences) and in
+held-out predictive accuracy. Note any failure modes (e.g.\ AI never
+choosing the outside option, AI being too deterministic).
+
+\paragraph{Output of the code.}
+\begin{figure}[h!]
+  \centering
+  \fbox{\parbox{0.9\linewidth}{\centering
+    \vspace{2.5cm}
+    \emph{Screenshot placeholder: terminal output of the Problem~7 AI-agent script}.
+    \vspace{2.5cm}}}
+  \caption{Output produced when running the Problem~7 AI-agent script.}
+\end{figure}
+
+\FloatBarrier
+\newpage
+
+% =====================================================================
+\appendix
+\section*{Appendix: Where to Find the Code in the Submitted Repository}
+
+The submission is a single zip file with the following structure (top level):
+
+\begin{center}
+\begin{tabular}{ll}
+\toprule
+Path & Contents \\
+\midrule
+\texttt{report.tex}, \texttt{report.pdf} & This report. \\
+\texttt{README.md}                       & Run instructions and repo overview. \\
+\texttt{data.csv}                        & Full Expedia dataset for estimation. \\
+\texttt{data1.csv}--\texttt{data4.csv}   & Small datasets for assortment / pricing. \\
+\texttt{scripts/}                        & All Python source code. \\
+\texttt{results/}                        & JSON output produced by the scripts. \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The mapping from problems to source files is:
+
+\begin{center}
+\begin{tabular}{lll}
+\toprule
+Problem & Script & Output \\
+\midrule
+Problem 1 & \texttt{scripts/problem1\_mnl.py}        & \texttt{results/problem1\_results.json} \\
+Problem 2 & \texttt{scripts/problem2\_assortment.py} & \texttt{results/problem2\_results.json} \\
+Problem 3 & \texttt{scripts/problem3\_pricing.py}    & \texttt{results/problem3\_results.json} \\
+Problem 4 & \texttt{scripts/problem4\_mixture.py}    & \texttt{results/problem4\_results.json} \\
+Problem 5 & \texttt{scripts/problem5\_assortment.py} & \texttt{results/problem5\_results.json} \\
+          &                                          & \texttt{results/problem5\_results\_gurobi.json} \\
+Problem 6 & \texttt{scripts/problem\_6\_mmnl\_other.py} & \texttt{results/problem6\_results.json} \\
+Problem 7 & \emph{(see} \texttt{README.md} \emph{section ``Problem 7'')} & --- \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+Shared infrastructure (MNL log-likelihood, Newton solver, scaling,
+revenue-ordered routine, golden-section, etc.) is in
+\texttt{scripts/mnl\_utils.py}. See \texttt{README.md} for the exact
+commands used to reproduce every JSON file in \texttt{results/}.
 
 \end{document}
