@@ -1,0 +1,78 @@
+AI generation prompt template for Problem 7a
+AI agent used: ChatGPT (GPT-5.5 Thinking)
+
+Purpose:
+Create an AI-generated booking column for a random sample of hotel search queries. For each sampled search query, the AI agent is shown the customer/search context and all hotel alternatives in the choice set. The AI must choose either one listed hotel alternative or the no-purchase option.
+
+Sampling:
+- Random seed: 42
+- Sample size: 100 unique search queries (`srch_id`)
+- For each sampled `srch_id`, all hotel alternatives in the query's choice set are retained.
+- The AI-generated dataset contains 100 search queries and 2,036 hotel rows.
+- The corrected AI choices produced 80 hotel purchases and 20 no-purchase outcomes.
+
+Prompt template used for each sampled query:
+
+You are simulating hotel booking behavior for a customer search query.
+
+You will be given:
+1. Customer/search context
+2. A table of all hotel alternatives shown to the customer
+3. Hotel attributes:
+   - alt_id
+   - prop_starrating
+   - prop_review_score
+   - prop_location_score
+   - prop_accesibility_score
+   - prop_log_historical_price
+   - price_usd
+   - prop_brand_bool
+   - promotion_flag
+
+Your task:
+Choose the hotel alternative the customer is most likely to book, or choose NO_PURCHASE if none of the available hotel options are attractive enough relative to their price, quality, location, review score, and other attributes.
+
+Important:
+- Return exactly one choice.
+- Your choice must be either one listed `alt_id` from the hotel options or `NO_PURCHASE`.
+- Do not choose a hotel that is not listed.
+- Consider the no-purchase option as a real alternative, not just a fallback.
+- If all options are weak, overpriced, low quality, or otherwise unattractive, choose `NO_PURCHASE`.
+
+Return format:
+srch_id,ai_choice
+
+Example query format:
+
+Search query: <srch_id>
+
+Customer/search context:
+srch_booking_window: <value>
+srch_adults_count: <value>
+srch_children_count: <value>
+srch_room_count: <value>
+srch_saturday_night_bool: <value>
+
+Hotel options:
+<hotel alternatives table>
+
+Output:
+<srch_id>,<one alt_id or NO_PURCHASE>
+
+
+Conversion into AI-generated booking column:
+
+After the AI generated one choice for each sampled search query, the choices were converted into a binary booking column called `booking_ai_sample100_corrected`.
+
+Rule:
+- If the AI selected a hotel `alt_id`, that hotel row received `booking_ai_sample100_corrected = 1`.
+- All other hotel rows in the same `srch_id` received `booking_ai_sample100_corrected = 0`.
+- If the AI selected `NO_PURCHASE`, all hotel rows in that `srch_id` received `booking_ai_sample100_corrected = 0`.
+
+Files produced:
+- `1_data_with_ai_bookings_sample100_corrected.csv`: full original-style dataset with the corrected AI booking column and an indicator for the 100 sampled queries.
+- `ai_booking_sample100_corrected_rows.csv`: sample-only rows for the 100 sampled search queries.
+- `ai_booking_sample100_corrected_decisions.csv`: one row per sampled search query with the AI's selected hotel or `NO_PURCHASE`.
+
+Note:
+This file documents the prompt template and conversion procedure used for the 7a AI-generated booking column. The held-out predictive evaluation in 7c uses a separate prompt file, `ai_heldout_prompt.txt`, and a separate prediction file, `ai_heldout_predictions.csv`.
