@@ -1,0 +1,1485 @@
+You are predicting hotel booking choices.
+
+Below are examples from real hotel search queries. Each example includes the customer/search context, the hotel alternatives shown, and the actual observed customer choice. The observed choice is either one hotel alt_id or NO_PURCHASE.
+
+Context examples:
+Search query 83158
+Customer/search context:
+{'srch_booking_window': 7, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  3                1                    2                        1                          5         87               0
+      2                4                  3                1                    0                        0                          5        136               1
+      3                4                  5                1                    2                        0                          5        139               0
+      4                4                  4                1                    2                        0                          5        189               0
+      5                4                  4                1                    2                        0                          5         90               0
+Observed customer choice: 2
+
+Search query 85912
+Customer/search context:
+{'srch_booking_window': 2, 'srch_adults_count': 2, 'srch_children_count': 1, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  5                1                    2                        0                          0        135               0
+      2                3                  5                1                    2                        0                          0        129               0
+      3                3                  5                1                    2                        0                          0        149               0
+      4                3                  4                1                    2                        0                          0         85               0
+      5                2                  4                1                    1                        0                          0        100               0
+      6                3                  5                1                    1                        0                          0        129               0
+      7                2                  3                1                    0                        0                          0         50               0
+      8                3                  4                1                    2                        0                          0         84               0
+      9                3                  5                1                    1                        0                          0        139               0
+     10                3                  5                1                    2                        0                          0         90               0
+     11                2                  3                1                    2                        0                          0         64               0
+     12                4                  5                0                    2                        0                          0        199               0
+     13                2                  3                1                    2                        0                          0         70               0
+     14                2                  3                1                    2                        0                          0         52               0
+     15                2                  2                1                    2                        0                          0         53               0
+     16                2                  3                0                    2                        0                          0         50               0
+     17                3                  4                1                    2                        0                          0         92               0
+     18                3                  4                1                    2                        0                          0         75               0
+     19                3                  5                1                    3                        0                          0        114               0
+     20                4                  5                1                    3                        0                          0        149               0
+     21                3                  5                1                    2                        0                          0        114               0
+     22                3                  5                1                    2                        0                          0         91               0
+     23                3                  4                1                    3                        0                          0         76               0
+     24                3                  5                1                    3                        0                          0        159               0
+     25                2                  3                1                    3                        0                          0         69               0
+     26                3                  3                1                    0                        0                          0         79               0
+     27                3                  4                1                    3                        0                          0         95               0
+     28                3                  5                1                    2                        0                          0         79               1
+     29                3                  5                1                    3                        0                          0        119               0
+     30                2                  2                1                    3                        0                          0         50               0
+     31                2                  3                1                    2                        0                          0         50               0
+     32                3                  4                1                    1                        0                          0         72               1
+Observed customer choice: 15
+
+Search query 90624
+Customer/search context:
+{'srch_booking_window': 9, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                5                  5                0                    2                        0                          5        262               0
+      2                4                  3                0                    4                        0                          5        179               0
+      3                4                  4                0                    4                        0                          5         65               0
+      4                3                  5                1                    4                        0                          5        102               0
+      5                4                  5                0                    4                        0                          5         84               0
+      6                3                  4                0                    4                        0                          5        101               0
+      7                3                  5                0                    0                        0                          5         70               0
+      8                4                  5                0                    4                        0                          5         83               0
+      9                3                  5                0                    3                        0                          5         65               0
+     10                5                  5                0                    2                        0                          5        154               0
+     11                4                  5                0                    4                        0                          5         63               0
+     12                3                  4                1                    4                        0                          5         62               0
+     13                5                  5                0                    4                        0                          5        262               0
+     14                4                  3                0                    4                        0                          5        124               0
+     15                4                  5                0                    4                        0                          5         73               0
+     16                3                  5                0                    4                        0                          5         52               0
+     17                4                  4                0                    2                        0                          5         71               0
+     18                4                  4                0                    4                        0                          5        171               0
+     19                5                  5                0                    1                        0                          5        158               0
+     20                4                  3                0                    4                        0                          5         95               0
+     21                4                  5                0                    4                        0                          5        131               0
+     22                3                  5                0                    2                        0                          5         78               0
+     23                4                  5                0                    3                        0                          5        131               1
+     24                3                  4                0                    4                        0                          5         58               0
+Observed customer choice: 15
+
+Search query 197543
+Customer/search context:
+{'srch_booking_window': 20, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  5                1                    3                        0                          5        119               0
+      2                4                  5                0                    3                        0                          6        239               0
+      3                3                  3                0                    3                        0                          5        109               0
+      4                3                  5                1                    3                        0                          5        129               0
+      5                3                  4                0                    3                        0                          5        109               0
+      6                3                  3                1                    3                        0                          5         80               1
+      7                4                  4                1                    3                        0                          5         95               0
+      8                3                  4                1                    3                        0                          5        129               0
+      9                3                  3                0                    2                        0                          5        109               0
+     10                4                  4                1                    3                        0                          5        159               0
+     11                4                  4                1                    3                        0                          5        104               0
+     12                3                  4                1                    3                        0                          5        109               0
+     13                3                  4                1                    3                        0                          5        161               0
+     14                3                  3                1                    3                        0                          5        120               0
+     15                4                  5                0                    2                        0                          5        159               0
+Observed customer choice: 11
+
+Search query 406668
+Customer/search context:
+{'srch_booking_window': 121, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  4                1                    4                        0                          6        181               0
+      2                4                  4                1                    4                        0                          5        179               0
+      3                4                  4                0                    2                        0                          5        159               0
+      4                4                  4                1                    2                        0                          5        110               1
+      5                4                  4                1                    2                        0                          5        125               0
+      6                4                  5                1                    3                        0                          5        135               0
+Observed customer choice: 1
+
+Search query 410987
+Customer/search context:
+{'srch_booking_window': 8, 'srch_adults_count': 1, 'srch_children_count': 1, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  3                1                    3                        0                          6        242               0
+      2                3                  5                1                    6                        0                          6        295               0
+      3                4                  3                1                    6                        0                          6       1031               0
+      4                4                  3                1                    3                        0                          6        241               0
+      5                4                  4                1                    4                        0                          6        199               0
+      6                3                  4                1                    1                        0                          5        110               0
+      7                3                  3                1                    1                        0                          5        110               0
+      8                4                  4                1                    6                        0                          6        467               0
+      9                3                  3                1                    1                        0                          5        109               0
+     10                3                  4                1                    2                        0                          5        168               0
+     11                3                  4                1                    6                        0                          6        401               0
+     12                4                  3                0                    6                        0                          6        250               1
+     13                3                  3                1                    3                        0                          5        149               0
+     14                4                  4                1                    4                        0                          6        278               0
+     15                3                  3                1                    2                        0                          5        130               0
+     16                4                  5                1                    6                        0                          6        364               0
+     17                2                  4                1                    3                        0                          5        135               0
+     18                2                  3                1                    2                        0                          5        130               0
+     19                3                  4                1                    3                        0                          6        171               0
+     20                4                  5                1                    4                        0                          6        298               0
+     21                4                  5                1                    6                        0                          6        378               0
+     22                5                  5                0                    6                        0                          6        587               0
+     23                5                  5                1                    6                        0                          6        622               1
+     24                4                  4                0                    4                        0                          6        288               0
+     25                2                  2                0                    4                        0                          5         60               0
+Observed customer choice: 12
+
+Search query 611052
+Customer/search context:
+{'srch_booking_window': 1, 'srch_adults_count': 1, 'srch_children_count': 2, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  2                1                    1                        0                          4         58               0
+      2                2                  3                1                    1                        0                          4         69               0
+      3                2                  3                1                    1                        0                          4         70               0
+      4                3                  3                1                    2                        0                          4         74               0
+      5                2                  3                1                    1                        0                          5         95               0
+      6                3                  4                1                    2                        0                          5        109               0
+      7                3                  4                1                    2                        0                          5        117               0
+      8                3                  4                1                    2                        0                          5        139               0
+      9                3                  4                1                    2                        0                          5        144               0
+     10                4                  5                1                    1                        0                          5        169               0
+Observed customer choice: NO_PURCHASE
+
+Search query 617639
+Customer/search context:
+{'srch_booking_window': 3, 'srch_adults_count': 1, 'srch_children_count': 1, 'srch_room_count': 2, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  5                1                    2                        0                          5         73               0
+      2                4                  4                1                    3                        0                          5         71               0
+Observed customer choice: NO_PURCHASE
+
+Search query 629175
+Customer/search context:
+{'srch_booking_window': 27, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  5                0                    4                        0                          0        239               0
+      2                4                  4                1                    4                        0                          0        190               0
+      3                4                  4                1                    4                        0                          0        267               0
+      4                3                  4                1                    4                        0                          0        287               0
+      5                4                  4                1                    4                        0                          0        267               0
+      6                2                  4                1                    4                        0                          0        124               0
+      7                3                  3                0                    4                        0                          0        180               1
+      8                4                  4                1                    4                        0                          0        190               0
+      9                3                  5                0                    4                        0                          0        171               1
+     10                4                  5                1                    4                        0                          0        282               0
+     11                4                  5                0                    2                        0                          0        344               0
+     12                3                  3                1                    4                        0                          0        146               0
+     13                3                  3                0                    4                        0                          0        229               0
+     14                2                  3                1                    4                        0                          0        142               0
+     15                2                  3                1                    3                        0                          0         66               0
+     16                4                  5                1                    4                        0                          0        286               0
+     17                3                  3                1                    3                        0                          0        146               1
+     18                2                  4                1                    4                        0                          0        146               0
+     19                3                  5                1                    4                        0                          0        210               0
+     20                4                  4                1                    4                        0                          0        267               0
+     21                3                  4                0                    0                        0                          0        121               1
+     22                3                  5                1                    4                        0                          0        191               0
+     23                2                  3                1                    4                        0                          0        143               0
+     24                3                  4                0                    4                        0                          0        190               0
+     25                3                  4                1                    4                        0                          0        163               0
+     26                4                  5                0                    4                        0                          0        286               0
+     27                2                  3                1                    4                        0                          0        143               0
+     28                2                  4                1                    4                        0                          0        154               0
+     29                2                  2                1                    4                        0                          0         95               0
+     30                2                  4                0                    4                        0                          0        123               0
+     31                2                  4                0                    4                        0                          0         95               0
+     32                3                  3                1                    3                        0                          0        105               0
+Observed customer choice: NO_PURCHASE
+
+Search query 643801
+Customer/search context:
+{'srch_booking_window': 144, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  3                0                    4                        0                          4         56               0
+      2                2                  3                0                    5                        0                          5         60               0
+      3                3                  3                0                    5                        0                          5         56               0
+      4                3                  3                0                    5                        0                          5         70               0
+      5                2                  2                0                    4                        0                          5         62               0
+      6                3                  3                0                    5                        0                          5         62               0
+      7                3                  5                0                    1                        0                          5         63               0
+      8                2                  3                1                    5                        0                          5         67               0
+      9                2                  2                0                    5                        0                          4         67               0
+     10                3                  4                0                    4                        0                          5         68               0
+     11                4                  2                0                    4                        0                          5         70               0
+     12                4                  3                0                    4                        0                          5         70               0
+     13                3                  3                0                    4                        0                          5         70               0
+     14                3                  4                0                    4                        0                          5         70               0
+     15                3                  3                1                    4                        0                          5         71               0
+     16                4                  3                0                    4                        0                          5         73               0
+     17                2                  4                1                    4                        0                          5         74               0
+     18                3                  5                0                    0                        0                          5         74               0
+     19                4                  4                0                    2                        0                          5         76               0
+     20                3                  3                0                    5                        0                          5         77               0
+     21                4                  3                0                    5                        0                          5         77               0
+     22                2                  4                1                    3                        0                          5         79               0
+     23                4                  3                0                    5                        0                          5         79               0
+     24                4                  3                0                    1                        0                          5         80               0
+Observed customer choice: NO_PURCHASE
+
+Now predict the customer choice for each held-out search query below. For each query, return exactly one prediction:
+- one listed alt_id, or
+- NO_PURCHASE
+
+Return your answer as a CSV with columns:
+srch_id,predicted_choice
+
+Held-out queries:
+Search query 43682
+Customer/search context:
+{'srch_booking_window': 2, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  4                1                    2                        0                          0         80               0
+      2                2                  3                1                    2                        0                          0         74               0
+      3                2                  4                1                    2                        0                          0         75               0
+      4                3                  5                1                    2                        0                          0        104               0
+      5                2                  4                1                    3                        0                          0         85               1
+      6                2                  3                0                    2                        0                          0         63               0
+      7                3                  5                1                    1                        0                          0         99               0
+      8                4                  5                1                    3                        0                          0        109               0
+      9                3                  3                1                    2                        0                          0         95               0
+     10                5                  5                0                    2                        0                          0        139               0
+     11                3                  4                1                    2                        0                          0         89               0
+     12                2                  3                1                    2                        0                          0         75               0
+
+Search query 61359
+Customer/search context:
+{'srch_booking_window': 72, 'srch_adults_count': 2, 'srch_children_count': 1, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                5                  4                0                    2                        0                          0         89               0
+      2                4                  3                1                    2                        0                          0         89               0
+      3                4                  5                1                    2                        0                          0         76               0
+      4                5                  5                0                    0                        0                          0        151               0
+      5                4                  5                0                    2                        0                          0        139               0
+      6                4                  5                0                    2                        0                          0        171               0
+      7                3                  2                1                    2                        0                          0         62               0
+      8                3                  2                0                    2                        0                          0         83               0
+      9                4                  4                0                    2                        0                          0         23               0
+     10                4                  5                0                    2                        0                          0        193               0
+
+Search query 65339
+Customer/search context:
+{'srch_booking_window': 13, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  2                0                    1                        0                          5        113               0
+      2                3                  4                1                    1                        0                          5        430               0
+      3                5                  5                1                    4                        0                          5        305               0
+      4                4                  5                1                    4                        0                          6        369               0
+      5                4                  4                1                    4                        0                          5        409               0
+      6                3                  4                1                    3                        0                          5        104               1
+      7                4                  5                1                    3                        0                          5        329               0
+      8                4                  4                1                    3                        0                          5        129               1
+      9                3                  3                1                    3                        0                          5        108               1
+     10                4                  4                1                    3                        0                          5        199               0
+     11                4                  5                1                    4                        0                          6        389               0
+     12                2                  3                1                    1                        0                          4         59               0
+     13                2                  3                1                    1                        0                          5         75               0
+     14                4                  4                1                    4                        0                          5        420               0
+     15                4                  4                1                    3                        0                          5        121               0
+     16                3                  4                1                    3                        0                          5        107               0
+     17                3                  5                1                    3                        0                          5        169               0
+     18                3                  5                1                    3                        0                          5        169               0
+     19                2                  3                1                    3                        0                          5        391               0
+     20                4                  5                1                    4                        0                          6        399               0
+
+Search query 74418
+Customer/search context:
+{'srch_booking_window': 3, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  3                1                    1                        0                          5         65               0
+      2                3                  5                1                    1                        0                          5         89               0
+      3                3                  5                1                    2                        0                          5         99               0
+      4                2                  4                1                    1                        0                          5         55               0
+      5                3                  5                1                    1                        0                          5        149               0
+      6                2                  4                1                    1                        0                          5         90               0
+      7                3                  5                1                    2                        0                          5        104               0
+      8                2                  5                1                    1                        0                          5         89               0
+      9                3                  4                1                    1                        0                          5         96               0
+     10                2                  4                1                    0                        0                          5         73               0
+     11                3                  3                1                    2                        0                          5        109               0
+     12                4                  5                1                    2                        0                          5        135               0
+     13                4                  3                1                    2                        0                          5         89               0
+     14                2                  3                1                    1                        0                          5         74               0
+
+Search query 88597
+Customer/search context:
+{'srch_booking_window': 29, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  3                1                    2                        0                          0         59               0
+      2                2                  3                1                    3                        0                          0         59               0
+      3                2                  3                1                    2                        0                          0         60               0
+      4                2                  2                1                    2                        0                          0         50               0
+      5                2                  2                1                    1                        0                          0         70               0
+      6                2                  2                1                    2                        0                          0         70               0
+      7                3                  3                1                    3                        0                          0         51               0
+      8                3                  3                1                    2                        0                          0         75               0
+      9                2                  3                1                    2                        0                          0         55               0
+     10                3                  3                1                    2                        0                          0         75               0
+     11                2                  3                1                    3                        0                          0         65               0
+     12                3                  3                1                    2                        0                          0         75               0
+     13                2                  3                1                    2                        0                          0         65               0
+     14                2                  3                1                    2                        0                          0         55               0
+     15                2                  3                1                    3                        0                          0         49               0
+     16                2                  3                1                    3                        0                          0         65               0
+     17                2                  3                1                    2                        0                          0         50               0
+     18                2                  3                1                    3                        0                          0         68               0
+     19                2                  3                1                    1                        0                          0         55               0
+     20                2                  3                1                    2                        0                          0         59               0
+     21                3                  5                1                    3                        0                          0         73               0
+     22                2                  3                1                    2                        0                          0         65               0
+     23                3                  3                1                    3                        0                          0         60               0
+     24                2                  3                1                    3                        0                          0         50               0
+     25                2                  2                1                    2                        0                          0         60               0
+     26                2                  3                1                    4                        0                          0         51               0
+     27                3                  2                1                    3                        0                          0         67               0
+     28                3                  2                1                    2                        0                          0         65               0
+     29                2                  3                1                    2                        0                          0         58               0
+     30                2                  3                1                    2                        0                          0         47               0
+
+Search query 150165
+Customer/search context:
+{'srch_booking_window': 2, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  5                1                    5                        0                          5        259               0
+      2                4                  4                1                    4                        0                          5        279               0
+      3                4                  5                1                    5                        0                          5        299               0
+      4                3                  4                1                    5                        0                          5        210               0
+      5                3                  4                1                    4                        0                          5        249               0
+      6                3                  5                1                    4                        0                          5        295               0
+      7                4                  5                1                    4                        0                          5        219               0
+      8                3                  4                0                    4                        0                          5        249               1
+      9                4                  4                1                    5                        0                          5        299               0
+     10                3                  5                1                    5                        0                          5        259               0
+     11                4                  5                1                    5                        0                          5        249               0
+     12                5                  4                1                    5                        0                          5        299               0
+     13                4                  5                1                    4                        0                          6        299               0
+
+Search query 160597
+Customer/search context:
+{'srch_booking_window': 35, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  4                1                    4                        0                          6        450               0
+      2                3                  4                1                    3                        0                          5        199               0
+      3                4                  5                1                    2                        0                          6        481               0
+      4                4                  5                0                    2                        0                          6        296               0
+      5                3                  4                1                    2                        0                          6        240               0
+      6                4                  5                1                    4                        0                          6        470               0
+      7                2                  3                0                    3                        0                          5        135               0
+      8                4                  5                1                    3                        0                          6        229               0
+      9                3                  3                0                    3                        0                          5        169               0
+     10                4                  5                0                    3                        0                          6        199               1
+     11                2                  3                1                    3                        0                          5        159               0
+     12                4                  5                1                    3                        0                          6        199               0
+     13                4                  5                1                    4                        0                          6        379               0
+     14                3                  5                0                    4                        0                          6        319               1
+     15                4                  4                1                    4                        0                          6        299               0
+     16                3                  3                0                    3                        0                          5        149               1
+     17                3                  4                0                    3                        0                          5        149               0
+     18                3                  4                0                    3                        0                          6        199               1
+
+Search query 177147
+Customer/search context:
+{'srch_booking_window': 59, 'srch_adults_count': 1, 'srch_children_count': 1, 'srch_room_count': 2, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  3                1                    2                        0                          5         99               0
+      2                4                  4                1                    2                        0                          5        140               0
+      3                3                  3                1                    2                        0                          5        109               0
+      4                3                  4                1                    3                        0                          5        112               1
+      5                4                  4                1                    3                        0                          5        158               0
+      6                3                  5                1                    2                        0                          5        126               0
+      7                3                  5                1                    3                        0                          5        168               0
+      8                4                  5                1                    2                        0                          5        146               0
+      9                4                  5                1                    2                        0                          6        152               0
+     10                3                  4                1                    2                        0                          5        135               0
+     11                3                  5                1                    3                        0                          5        139               0
+     12                3                  5                1                    2                        0                          5        151               0
+     13                3                  5                1                    3                        0                          5        147               0
+     14                2                  2                1                    2                        0                          5         70               0
+     15                3                  3                1                    2                        0                          5         84               0
+     16                3                  5                1                    3                        0                          5        148               0
+     17                3                  4                1                    2                        0                          5        126               1
+     18                3                  5                1                    2                        0                          5        129               0
+     19                4                  4                1                    3                        0                          5        161               0
+     20                3                  5                1                    3                        0                          5        248               0
+     21                3                  3                1                    2                        0                          5        129               0
+     22                3                  4                1                    3                        0                          5        139               0
+     23                3                  5                1                    2                        0                          5        138               0
+     24                4                  5                0                    2                        0                          6        314               0
+     25                3                  3                1                    2                        0                          5         90               0
+     26                4                  5                1                    2                        0                          5        248               0
+     27                3                  3                1                    2                        0                          5        130               0
+     28                2                  4                1                    2                        0                          5        117               0
+     29                3                  5                1                    2                        0                          5        129               0
+     30                4                  5                0                    1                        0                          5        168               0
+     31                3                  4                1                    1                        0                          5         90               0
+     32                3                  4                1                    3                        0                          5        169               0
+
+Search query 190668
+Customer/search context:
+{'srch_booking_window': 121, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  5                1                    1                        0                          5        106               0
+
+Search query 220615
+Customer/search context:
+{'srch_booking_window': 0, 'srch_adults_count': 2, 'srch_children_count': 1, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  3                1                    0                        0                          5        109               0
+      2                2                  4                1                    1                        0                          5         55               0
+      3                3                  5                1                    2                        0                          5        149               0
+      4                3                  4                1                    2                        0                          5        139               0
+      5                3                  5                1                    1                        0                          5        152               1
+      6                3                  4                1                    2                        0                          5        113               0
+
+Search query 265335
+Customer/search context:
+{'srch_booking_window': 21, 'srch_adults_count': 1, 'srch_children_count': 1, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  4                1                    2                        0                          5        207               0
+      2                2                  3                1                    2                        0                          5        120               0
+      3                4                  5                1                    2                        0                          5        280               0
+
+Search query 314931
+Customer/search context:
+{'srch_booking_window': 6, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  4                1                    1                        0                          5        149               0
+      2                3                  5                1                    2                        0                          5        114               0
+      3                3                  5                1                    1                        0                          5        149               0
+      4                2                  2                1                    2                        0                          5         46               0
+      5                4                  4                1                    1                        0                          5        205               0
+      6                2                  3                0                    2                        0                          5         69               0
+      7                2                  2                1                    2                        0                          5         55               0
+      8                3                  5                1                    2                        0                          5        110               0
+      9                2                  3                1                    1                        0                          5         65               0
+     10                3                  5                1                    0                        0                          5        105               0
+     11                3                  4                1                    1                        0                          5        119               0
+     12                2                  2                1                    2                        0                          4         42               0
+     13                2                  4                1                    2                        0                          5         80               0
+     14                3                  5                1                    2                        0                          5        159               0
+     15                4                  4                1                    0                        0                          5         98               0
+     16                2                  2                1                    2                        0                          5         60               0
+     17                3                  3                1                    1                        0                          5         80               1
+     18                3                  3                1                    1                        0                          5         76               0
+     19                2                  3                1                    2                        0                          5         85               0
+     20                3                  3                1                    2                        0                          5        105               0
+     21                2                  3                1                    2                        0                          4         45               0
+     22                3                  5                1                    2                        0                          5        179               0
+
+Search query 339222
+Customer/search context:
+{'srch_booking_window': 4, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  5                0                    5                        0                          6        176               0
+      2                4                  3                1                    5                        0                          6        134               1
+      3                4                  4                0                    5                        0                          6        163               0
+      4                3                  5                0                    5                        0                          5         84               0
+      5                3                  3                0                    5                        0                          5         59               0
+      6                4                  4                1                    5                        0                          6        123               0
+      7                4                  3                0                    5                        0                          6        120               0
+      8                3                  4                0                    5                        0                          5         83               0
+      9                3                  3                1                    5                        0                          5         71               0
+     10                3                  3                0                    5                        0                          5         84               0
+     11                3                  3                0                    2                        0                          5        144               0
+     12                3                  4                0                    5                        0                          5         61               0
+     13                3                  3                1                    5                        0                          5         91               0
+     14                2                  4                0                    5                        0                          5         42               0
+     15                4                  3                1                    5                        0                          6        168               0
+     16                4                  3                1                    3                        0                          6        128               0
+     17                3                  4                0                    5                        0                          5         89               0
+     18                2                  4                0                    5                        0                          5         45               0
+     19                2                  2                0                    4                        0                          5         48               0
+     20                2                  3                0                    5                        0                          5         45               0
+     21                4                  5                0                    5                        0                          5         93               0
+     22                3                  4                0                    5                        0                          5        128               0
+     23                3                  3                0                    5                        0                          5        132               0
+     24                4                  4                1                    5                        0                          6        158               0
+
+Search query 346083
+Customer/search context:
+{'srch_booking_window': 0, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  3                1                    0                        0                          5        107               0
+      2                2                  3                1                    0                        0                          5         63               0
+      3                3                  3                1                    1                        0                          5        109               0
+      4                2                  3                1                    2                        0                          5         79               0
+      5                4                  5                1                    0                        0                          5        183               0
+      6                4                  4                1                    0                        0                          5        181               1
+      7                2                  3                0                    1                        0                          5         71               0
+      8                3                  5                1                    2                        0                          5        147               0
+      9                2                  4                0                    2                        0                          5        135               0
+     10                2                  3                1                    2                        0                          5        113               0
+     11                3                  3                0                    0                        0                          5        101               0
+
+Search query 348500
+Customer/search context:
+{'srch_booking_window': 0, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 2, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  3                0                    4                        0                          5        100               0
+      2                4                  5                1                    4                        0                          5        299               0
+      3                4                  5                1                    4                        0                          6        305               0
+      4                3                  3                0                    4                        0                          5        143               1
+      5                2                  3                0                    4                        0                          5        132               0
+      6                4                  5                1                    4                        0                          6        289               0
+      7                4                  5                0                    4                        0                          5        289               0
+      8                4                  5                1                    4                        0                          6        239               0
+      9                2                  4                1                    4                        0                          5        109               0
+     10                2                  3                0                    4                        0                          5        132               0
+     11                2                  3                0                    4                        0                          4         47               1
+     12                2                  3                1                    4                        0                          5        129               0
+     13                3                  4                1                    4                        0                          5        219               0
+     14                4                  4                0                    4                        0                          5        237               0
+     15                2                  3                1                    2                        0                          5        120               0
+     16                2                  4                1                    3                        0                          5        118               1
+     17                3                  4                1                    4                        0                          5        189               0
+     18                3                  4                1                    4                        0                          5        189               0
+     19                2                  3                1                    4                        0                          5         55               1
+     20                5                  4                1                    4                        0                          5        296               1
+     21                4                  4                1                    4                        0                          5        329               0
+     22                3                  3                0                    1                        0                          5         79               1
+     23                3                  5                1                    4                        0                          5        279               0
+     24                3                  4                1                    2                        0                          5        229               0
+     25                4                  5                1                    4                        0                          6        229               0
+     26                4                  4                1                    4                        0                          6        300               0
+
+Search query 350583
+Customer/search context:
+{'srch_booking_window': 4, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  4                0                    1                        0                          5        119               0
+
+Search query 352115
+Customer/search context:
+{'srch_booking_window': 123, 'srch_adults_count': 3, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  4                1                    3                        0                          6        189               0
+      2                2                  3                1                    1                        0                          5        150               0
+      3                4                  5                1                    2                        0                          6        359               0
+      4                2                  3                1                    0                        0                          5        110               0
+      5                2                  4                1                    2                        0                          5        160               0
+      6                3                  5                1                    3                        0                          6        219               0
+      7                3                  4                0                    2                        0                          5        264               0
+      8                3                  4                1                    3                        0                          6        207               0
+      9                3                  4                1                    3                        0                          6        202               1
+     10                3                  5                1                    2                        0                          5        211               0
+     11                3                  3                1                    0                        0                          5        200               0
+     12                4                  5                1                    3                        0                          6        215               1
+     13                2                  3                1                    2                        0                          5        186               0
+     14                2                  4                1                    2                        0                          5        149               0
+     15                3                  4                1                    2                        0                          5        144               0
+     16                2                  4                1                    1                        0                          5        135               0
+     17                4                  5                0                    2                        0                          6        204               0
+     18                2                  4                1                    2                        0                          5        149               0
+     19                3                  5                0                    1                        0                          6        379               0
+
+Search query 379336
+Customer/search context:
+{'srch_booking_window': 1, 'srch_adults_count': 2, 'srch_children_count': 1, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  5                1                    4                        0                          6        429               0
+      2                4                  5                1                    4                        0                          5        179               0
+      3                4                  5                1                    4                        0                          6        259               0
+      4                4                  5                1                    4                        0                          6        195               1
+      5                4                  5                1                    4                        0                          5        189               0
+      6                4                  4                1                    4                        0                          6        239               0
+
+Search query 387677
+Customer/search context:
+{'srch_booking_window': 12, 'srch_adults_count': 1, 'srch_children_count': 1, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  3                1                    1                        0                          0        100               0
+      2                3                  5                1                    2                        0                          0        109               0
+      3                3                  3                1                    2                        0                          0         55               1
+      4                3                  5                1                    3                        0                          0         90               0
+      5                2                  2                1                    3                        0                          0         93               0
+      6                2                  4                1                    3                        0                          0         70               0
+      7                3                  5                1                    2                        0                          0        119               0
+      8                3                  4                1                    3                        0                          0        119               0
+      9                3                  5                1                    1                        0                          0        109               0
+     10                2                  3                1                    3                        0                          0         47               0
+     11                3                  5                1                    3                        0                          0        110               0
+     12                2                  4                1                    2                        0                          0         76               0
+     13                3                  5                1                    2                        0                          0        103               0
+     14                3                  3                1                    2                        0                          0         84               0
+     15                2                  3                1                    3                        0                          0         60               0
+     16                3                  4                1                    2                        0                          0         97               0
+     17                3                  5                1                    2                        0                          0        139               0
+     18                3                  5                1                    3                        0                          0        119               0
+     19                2                  3                1                    2                        0                          0         49               0
+     20                3                  5                1                    2                        0                          0        137               0
+     21                3                  4                1                    3                        0                          0         59               1
+     22                2                  2                1                    2                        0                          0         54               1
+     23                3                  5                1                    1                        0                          0         99               0
+     24                2                  4                1                    3                        0                          0         80               0
+     25                3                  5                1                    2                        0                          0        182               0
+     26                3                  5                1                    3                        0                          0        100               0
+     27                2                  3                1                    2                        0                          0         69               0
+     28                2                  3                1                    3                        0                          0         85               0
+     29                2                  3                1                    3                        0                          0         74               0
+     30                2                  2                1                    1                        0                          0         59               0
+     31                3                  5                1                    3                        0                          0        120               0
+
+Search query 413361
+Customer/search context:
+{'srch_booking_window': 2, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  4                1                    2                        0                          5        109               0
+      2                3                  5                1                    2                        0                          5        105               0
+      3                2                  5                1                    1                        0                          5        115               0
+      4                3                  5                1                    1                        0                          5        111               0
+      5                3                  5                1                    1                        0                          5        125               0
+      6                3                  4                1                    2                        0                          5        115               0
+      7                3                  5                1                    1                        0                          5         99               0
+      8                3                  5                1                    2                        0                          5        119               0
+      9                3                  5                1                    2                        0                          5        117               0
+
+Search query 417567
+Customer/search context:
+{'srch_booking_window': 58, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  3                0                    2                        0                          4         20               0
+      2                2                  3                1                    3                        0                          4         20               1
+      3                2                  2                1                    3                        0                          4         24               1
+      4                2                  3                1                    3                        0                          4         29               0
+      5                2                  3                1                    1                        0                          4         30               1
+      6                2                  3                1                    3                        0                          4         30               0
+      7                2                  4                0                    3                        0                          4         30               1
+      8                2                  3                0                    3                        0                          4         30               1
+      9                2                  2                1                    3                        0                          4         32               1
+     10                2                  4                1                    3                        0                          4         32               1
+     11                4                  4                1                    1                        0                          5         34               1
+     12                2                  3                1                    3                        0                          4         35               0
+     13                2                  3                0                    3                        0                          4         35               0
+     14                2                  4                1                    3                        0                          4         36               0
+     15                2                  3                0                    3                        0                          4         36               0
+     16                2                  2                1                    2                        0                          5         40               0
+     17                2                  2                1                    3                        0                          4         40               0
+     18                2                  3                1                    0                        0                          5         45               0
+     19                2                  2                0                    3                        0                          4         45               0
+     20                2                  2                1                    2                        0                          4         45               0
+     21                2                  3                1                    3                        0                          5         45               1
+     22                4                  3                1                    4                        0                          5         46               1
+     23                4                  4                1                    3                        0                          5         49               1
+     24                3                  3                1                    3                        0                          5         50               0
+     25                2                  3                1                    3                        0                          4         50               0
+     26                2                  3                1                    3                        0                          5         50               0
+     27                1                  3                0                    3                        0                          5         50               0
+     28                3                  4                1                    3                        0                          5         50               0
+     29                2                  2                1                    3                        0                          5         50               0
+     30                2                  3                1                    2                        0                          5         50               1
+     31                2                  3                1                    3                        0                          5         51               0
+     32                3                  4                1                    3                        0                          5         51               1
+     33                3                  3                1                    2                        0                          5         52               0
+
+Search query 422120
+Customer/search context:
+{'srch_booking_window': 4, 'srch_adults_count': 1, 'srch_children_count': 2, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  4                1                    3                        0                          5         98               0
+      2                3                  5                1                    3                        0                          5        114               0
+      3                3                  5                1                    3                        0                          5        144               0
+      4                3                  4                1                    1                        0                          5         79               0
+      5                2                  3                1                    3                        0                          4         44               0
+      6                3                  5                1                    1                        0                          5         99               0
+      7                3                  5                1                    3                        0                          5        109               0
+      8                4                  4                1                    3                        0                          5        159               0
+      9                3                  4                1                    1                        0                          5        108               0
+     10                3                  5                1                    2                        0                          5         94               0
+     11                2                  4                1                    3                        0                          4         89               0
+     12                3                  5                1                    3                        0                          5        109               0
+     13                2                  5                1                    1                        0                          4         63               0
+     14                2                  3                1                    3                        0                          4         40               0
+     15                3                  5                1                    3                        0                          5         79               0
+     16                2                  3                1                    3                        0                          4         49               0
+     17                3                  5                1                    2                        0                          5        109               0
+     18                2                  3                1                    3                        0                          4         55               0
+     19                2                  3                1                    3                        0                          4         52               0
+     20                3                  4                1                    1                        0                          5         90               0
+     21                2                  3                1                    1                        0                          4         70               0
+     22                4                  5                1                    3                        0                          5        149               0
+     23                3                  4                1                    3                        0                          5        129               0
+     24                3                  5                1                    3                        0                          5        110               0
+     25                2                  2                1                    3                        0                          4         53               0
+     26                3                  4                1                    3                        0                          5        100               0
+     27                3                  5                1                    3                        0                          5        169               0
+     28                2                  4                1                    3                        0                          4         69               0
+     29                2                  3                1                    3                        0                          5         75               0
+     30                3                  5                1                    1                        0                          5         90               0
+     31                2                  3                1                    3                        0                          4         55               0
+     32                2                  3                1                    3                        0                          4         70               0
+
+Search query 422591
+Customer/search context:
+{'srch_booking_window': 1, 'srch_adults_count': 2, 'srch_children_count': 2, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  4                1                    2                        0                          5        199               0
+      2                3                  4                0                    2                        0                          5        139               0
+      3                3                  4                1                    2                        0                          5        159               0
+      4                3                  4                0                    1                        0                          5        110               1
+      5                3                  3                1                    2                        0                          5         89               0
+      6                2                  3                1                    0                        0                          4         70               0
+      7                2                  3                1                    1                        0                          4         58               0
+      8                2                  2                1                    1                        0                          4         70               0
+      9                2                  2                1                    0                        0                          4         56               0
+     10                3                  5                1                    1                        0                          5        139               0
+     11                2                  3                1                    1                        0                          5         80               0
+     12                2                  3                1                    0                        0                          4         89               0
+     13                3                  4                1                    0                        0                          5        129               0
+     14                3                  5                1                    2                        0                          5        131               0
+     15                3                  5                1                    2                        0                          5        134               0
+     16                2                  3                1                    0                        0                          4         64               0
+     17                3                  3                1                    0                        0                          5        120               0
+     18                3                  5                1                    1                        0                          5        120               0
+     19                2                  3                1                    2                        0                          4         60               1
+     20                2                  3                1                    1                        0                          4         76               0
+     21                3                  5                1                    1                        0                          5        144               0
+     22                3                  4                1                    1                        0                          5        109               0
+     23                2                  3                1                    2                        0                          4         62               0
+     24                3                  5                1                    1                        0                          5        119               0
+     25                3                  5                1                    1                        0                          5        139               0
+
+Search query 439718
+Customer/search context:
+{'srch_booking_window': 4, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  4                1                    1                        0                          5        149               0
+      2                2                  3                1                    1                        0                          5        116               1
+      3                3                  5                1                    1                        0                          5        139               0
+      4                2                  2                1                    1                        0                          4         90               0
+
+Search query 470310
+Customer/search context:
+{'srch_booking_window': 36, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  4                1                    0                        0                          5         91               0
+      2                3                  3                1                    3                        0                          5        173               0
+      3                3                  4                0                    1                        0                          5         89               0
+      4                3                  4                1                    3                        0                          5        188               0
+      5                3                  3                1                    0                        0                          5         71               0
+      6                3                  3                0                    1                        0                          5        104               0
+      7                4                  4                0                    3                        0                          5        159               0
+      8                3                  3                1                    2                        0                          5         84               0
+      9                5                  5                0                    0                        0                          6        194               0
+     10                4                  5                1                    1                        0                          5         98               0
+     11                4                  4                0                    1                        0                          5        165               0
+     12                2                  2                1                    2                        0                          4         74               0
+     13                4                  3                1                    2                        0                          5        105               0
+     14                4                  4                1                    2                        0                          5         97               0
+     15                2                  3                1                    1                        0                          5         98               0
+     16                4                  4                1                    1                        0                          5        128               0
+
+Search query 470557
+Customer/search context:
+{'srch_booking_window': 56, 'srch_adults_count': 2, 'srch_children_count': 1, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  4                1                    0                        0                          5        169               0
+      2                3                  5                1                    2                        0                          5        127               0
+      3                2                  4                1                    2                        0                          4         70               0
+      4                2                  3                1                    2                        0                          5         90               0
+      5                3                  5                1                    2                        0                          5        159               0
+      6                2                  3                1                    2                        0                          4         79               0
+      7                2                  4                1                    1                        0                          5        200               0
+      8                2                  3                1                    2                        0                          5        140               0
+      9                3                  4                1                    2                        0                          5        114               0
+     10                3                  5                1                    2                        0                          5        123               0
+     11                2                  3                1                    2                        0                          4         67               0
+
+Search query 517257
+Customer/search context:
+{'srch_booking_window': 7, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  4                1                    2                        0                          5        136               0
+      2                4                  4                1                    2                        0                          5        119               0
+      3                4                  4                1                    1                        0                          5        107               1
+      4                4                  5                1                    2                        0                          5        166               0
+      5                4                  5                0                    1                        0                          5        101               0
+      6                3                  5                1                    0                        0                          5         91               0
+      7                4                  3                0                    3                        0                          5        119               0
+      8                3                  3                1                    1                        0                          5        128               0
+      9                3                  3                1                    0                        0                          5         89               0
+     10                2                  3                1                    1                        0                          4         74               0
+     11                3                  3                1                    3                        0                          5        119               0
+
+Search query 519914
+Customer/search context:
+{'srch_booking_window': 44, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                5                  5                1                    0                        0                          6        254               0
+      2                4                  4                1                    4                        0                          6        159               0
+      3                4                  4                0                    4                        0                          5        179               0
+      4                4                  5                1                    4                        0                          6        188               1
+      5                4                  5                1                    4                        0                          6        199               0
+      6                4                  5                1                    4                        0                          5        219               0
+      7                4                  5                1                    2                        0                          5        144               0
+      8                4                  5                1                    1                        0                          6        215               1
+      9                4                  5                1                    4                        0                          5        239               0
+     10                4                  5                0                    4                        0                          5        169               0
+     11                4                  5                1                    4                        0                          5        159               0
+     12                4                  5                1                    4                        0                          5        149               0
+     13                4                  5                0                    2                        0                          5        209               0
+
+Search query 525925
+Customer/search context:
+{'srch_booking_window': 11, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  5                1                    2                        0                          5        104               1
+      2                2                  4                1                    2                        0                          4         60               0
+      3                2                  3                1                    2                        0                          4         85               0
+      4                2                  3                1                    2                        0                          4         63               0
+      5                3                  5                1                    2                        0                          5         84               0
+      6                2                  2                1                    2                        0                          4         68               0
+      7                3                  5                1                    3                        0                          5        109               0
+      8                3                  5                1                    3                        0                          5         79               0
+      9                3                  4                1                    3                        0                          5         77               0
+     10                3                  5                1                    3                        0                          5         89               0
+     11                3                  3                1                    3                        0                          5         84               0
+     12                2                  3                1                    2                        0                          4         55               0
+     13                2                  3                1                    2                        0                          4         60               0
+     14                3                  3                1                    2                        0                          4         79               0
+     15                2                  2                1                    2                        0                          4         42               0
+
+Search query 598829
+Customer/search context:
+{'srch_booking_window': 14, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  4                0                    4                        0                          5         90               0
+      2                4                  5                1                    4                        0                          5        151               0
+      3                3                  3                1                    3                        0                          5         70               0
+      4                5                  5                1                    5                        0                          6        169               1
+      5                3                  5                0                    4                        0                          5        110               0
+      6                4                  5                0                    4                        0                          5        137               0
+      7                4                  5                1                    1                        0                          5        111               0
+      8                3                  3                1                    1                        0                          5         90               0
+      9                2                  3                1                    2                        0                          5         59               1
+     10                3                  3                1                    3                        0                          5         75               1
+     11                3                  5                1                    4                        0                          5        154               0
+     12                3                  3                1                    4                        0                          5         73               1
+     13                4                  4                0                    1                        0                          5         96               0
+     14                3                  4                1                    4                        0                          5        100               0
+     15                3                  3                1                    0                        0                          5         85               1
+     16                5                  5                1                    4                        0                          6        186               1
+     17                3                  4                1                    2                        0                          5         75               1
+     18                4                  3                0                    4                        0                          5         75               1
+     19                2                  4                1                    2                        0                          5         91               0
+     20                3                  4                1                    1                        0                          5        106               1
+     21                3                  5                0                    0                        0                          5         61               0
+     22                2                  3                0                    1                        0                          5         80               0
+     23                3                  4                1                    1                        0                          5        107               0
+     24                3                  4                0                    4                        0                          5        126               0
+     25                2                  3                0                    4                        0                          5        154               0
+     26                3                  3                1                    4                        0                          5         80               0
+     27                5                  5                0                    5                        0                          6        176               1
+     28                3                  3                1                    0                        0                          5         56               0
+     29                4                  4                1                    2                        0                          6        171               0
+     30                4                  5                1                    1                        0                          5        129               0
+     31                3                  4                1                    4                        0                          5         80               1
+     32                4                  4                0                    4                        0                          5        107               0
+     33                3                  5                0                    5                        0                          5        147               0
+
+Search query 606844
+Customer/search context:
+{'srch_booking_window': 6, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  3                1                    3                        0                          4         70               0
+      2                2                  3                1                    3                        0                          5        100               0
+      3                2                  3                1                    3                        0                          5         59               0
+      4                2                  2                1                    3                        0                          5         75               0
+      5                2                  2                0                    3                        0                          5         60               0
+      6                1                  2                1                    3                        0                          5         48               0
+      7                2                  3                0                    3                        0                          4         37               0
+      8                1                  3                1                    2                        0                          5         64               0
+      9                4                  5                0                    3                        0                          5        245               0
+     10                4                  3                1                    3                        0                          5        179               0
+     11                2                  2                1                    3                        0                          5         56               0
+     12                2                  3                1                    2                        0                          5         60               0
+     13                3                  4                1                    1                        0                          5        135               0
+     14                2                  3                1                    2                        0                          4         60               0
+     15                2                  4                1                    2                        0                          5         85               0
+     16                3                  3                1                    3                        0                          5        119               0
+     17                2                  3                1                    3                        0                          5         59               0
+     18                3                  4                1                    2                        0                          5        210               0
+     19                2                  2                0                    3                        0                          5         60               0
+     20                3                  3                1                    3                        0                          5        144               0
+
+Search query 614301
+Customer/search context:
+{'srch_booking_window': 2, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  3                1                    1                        0                          4         69               0
+      2                3                  4                0                    3                        0                          5        146               0
+      3                3                  3                1                    2                        0                          5        159               0
+      4                2                  2                1                    1                        0                          5         59               0
+      5                3                  4                1                    2                        0                          5        169               0
+      6                2                  3                0                    1                        0                          4         75               0
+      7                3                  3                1                    2                        0                          5        513               0
+      8                3                  3                1                    3                        0                          5        239               0
+      9                5                  5                1                    0                        0                          6        505               0
+     10                2                  3                0                    1                        0                          5         65               0
+     11                4                  5                1                    2                        0                          6        375               0
+
+Search query 615219
+Customer/search context:
+{'srch_booking_window': 101, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                5                  5                0                    6                        0                          6        398               0
+      2                4                  3                1                    0                        0                          5         91               0
+      3                3                  3                0                    6                        0                          5        165               0
+      4                4                  5                1                    3                        0                          5        113               0
+      5                4                  5                1                    6                        0                          6        210               0
+      6                4                  4                0                    2                        0                          5         86               0
+      7                2                  3                0                    0                        0                          5        123               0
+      8                4                  4                1                    6                        0                          5        193               1
+      9                4                  4                1                    6                        0                          5        223               1
+     10                5                  5                0                    6                        0                          6        379               1
+     11                4                  5                1                    3                        0                          5        210               1
+     12                2                  4                0                    6                        0                          5        142               0
+     13                4                  4                0                    6                        0                          6        272               0
+     14                4                  4                1                    1                        0                          5         91               1
+     15                4                  5                1                    6                        0                          5        234               1
+     16                3                  3                1                    0                        0                          5         76               0
+     17                4                  5                1                    5                        0                          5        223               0
+     18                5                  5                0                    5                        0                          5        310               0
+     19                2                  4                0                    6                        0                          5        224               0
+     20                5                  5                1                    6                        0                          6        520               0
+     21                3                  3                1                    1                        0                          5        116               1
+     22                3                  4                0                    6                        0                          5        183               1
+     23                3                  2                0                    6                        0                          5        349               0
+     24                4                  3                0                    6                        0                          5        210               0
+     25                4                  3                1                    2                        0                          5        112               0
+     26                4                  5                0                    6                        0                          6        191               0
+     27                4                  3                1                    2                        0                          5         69               1
+     28                3                  4                1                    6                        0                          5        132               1
+     29                4                  5                1                    1                        0                          6        196               0
+
+Search query 617714
+Customer/search context:
+{'srch_booking_window': 1, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  5                0                    4                        0                          0        254               1
+      2                4                  4                0                    0                        0                          0         99               1
+      3                3                  4                0                    2                        0                          0         59               1
+      4                4                  5                1                    3                        0                          0        199               1
+      5                4                  5                1                    3                        0                          0        184               0
+      6                3                  5                0                    3                        0                          0        129               0
+      7                3                  3                0                    3                        0                          0         99               0
+      8                2                  3                0                    4                        0                          0         79               0
+      9                3                  5                0                    3                        0                          0        119               0
+     10                4                  5                1                    4                        0                          0        255               0
+     11                4                  5                0                    3                        0                          0        148               1
+     12                3                  3                1                    1                        0                          0         93               0
+     13                2                  5                0                    3                        0                          0         98               1
+     14                3                  5                0                    4                        0                          0        179               0
+     15                4                  5                1                    1                        0                          0        139               0
+     16                3                  3                1                    1                        0                          0         45               0
+     17                3                  4                1                    2                        0                          0         62               0
+     18                3                  3                0                    3                        0                          0        119               0
+     19                3                  4                1                    4                        0                          0        139               0
+     20                3                  3                1                    2                        0                          0         60               0
+     21                3                  4                1                    1                        0                          0         60               0
+     22                3                  4                0                    1                        0                          0        139               0
+     23                3                  4                1                    1                        0                          0         65               0
+     24                3                  5                0                    4                        0                          0        161               1
+     25                3                  5                1                    3                        0                          0         89               0
+     26                2                  5                1                    3                        0                          0         79               0
+     27                3                  5                1                    1                        0                          0        136               0
+     28                3                  4                1                    3                        0                          0         69               0
+     29                3                  3                1                    1                        0                          0         72               1
+     30                2                  3                1                    2                        0                          0         54               1
+     31                2                  4                1                    2                        0                          0         50               1
+     32                2                  4                1                    3                        0                          0         65               0
+
+Search query 624387
+Customer/search context:
+{'srch_booking_window': 3, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  4                1                    4                        0                          5        179               0
+      2                4                  5                0                    3                        0                          5        216               1
+      3                3                  5                1                    4                        0                          5        189               0
+      4                4                  5                1                    4                        0                          6        199               0
+      5                2                  3                1                    3                        0                          5        129               0
+      6                4                  4                1                    4                        0                          5        189               0
+      7                4                  3                1                    4                        0                          5        159               0
+      8                3                  4                1                    2                        0                          5        143               0
+      9                2                  3                1                    4                        0                          5        133               0
+     10                3                  5                1                    4                        0                          5        179               0
+     11                3                  4                1                    4                        0                          5        159               0
+     12                3                  4                1                    3                        0                          5        169               0
+     13                4                  4                1                    3                        0                          5        179               0
+     14                2                  2                0                    4                        0                          4         52               0
+     15                4                  4                1                    4                        0                          5        285               0
+     16                2                  3                0                    4                        0                          5        114               1
+     17                2                  2                0                    3                        0                          4         60               0
+     18                4                  4                1                    4                        0                          6        295               0
+     19                3                  4                1                    4                        0                          5        179               0
+     20                4                  5                0                    4                        0                          5        259               0
+     21                4                  5                1                    4                        0                          5        209               0
+     22                3                  5                1                    3                        0                          5        189               0
+     23                3                  5                1                    3                        0                          5        209               0
+
+Search query 624682
+Customer/search context:
+{'srch_booking_window': 2, 'srch_adults_count': 3, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  5                1                    1                        0                          5        134               0
+      2                2                  3                1                    0                        0                          5         84               0
+      3                3                  4                1                    2                        0                          5        160               0
+      4                4                  4                0                    1                        0                          5        170               1
+      5                2                  3                1                    2                        0                          5         84               0
+      6                2                  3                1                    1                        0                          5         90               0
+      7                2                  3                1                    1                        0                          5        133               0
+      8                2                  4                1                    1                        0                          4        149               0
+      9                2                  5                0                    0                        0                          5        118               1
+     10                4                  4                1                    2                        0                          5        319               0
+     11                4                  3                1                    2                        0                          5        169               1
+     12                4                  5                1                    2                        0                          5        161               0
+     13                3                  5                1                    1                        0                          5        159               0
+     14                3                  5                1                    1                        0                          5        178               0
+     15                3                  3                1                    2                        0                          5        149               0
+     16                3                  5                1                    1                        0                          5        149               0
+     17                3                  4                1                    2                        0                          5        178               0
+     18                2                  2                1                    1                        0                          5         70               0
+     19                3                  3                1                    2                        0                          5        174               0
+     20                2                  3                0                    1                        0                          5        119               0
+     21                3                  5                1                    1                        0                          5        159               0
+
+Search query 626512
+Customer/search context:
+{'srch_booking_window': 0, 'srch_adults_count': 3, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  5                1                    4                        0                          5        151               1
+      2                4                  5                1                    4                        0                          5        169               0
+      3                5                  5                1                    4                        0                          6        269               0
+      4                4                  4                1                    4                        0                          6        149               0
+      5                4                  5                1                    4                        0                          6        205               0
+
+Search query 626854
+Customer/search context:
+{'srch_booking_window': 4, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  5                1                    3                        0                          5        111               0
+      2                4                  4                0                    4                        0                          5        141               0
+      3                2                  5                0                    4                        0                          5        116               0
+      4                4                  3                0                    4                        0                          5        111               0
+      5                4                  4                1                    3                        0                          5        103               0
+      6                4                  4                0                    4                        0                          5        208               0
+      7                4                  3                1                    4                        0                          5        110               0
+      8                4                  3                1                    4                        0                          5         98               0
+      9                4                  4                1                    3                        0                          4         81               1
+     10                4                  3                1                    4                        0                          5        110               0
+     11                4                  3                1                    4                        0                          5        105               0
+     12                3                  4                0                    0                        0                          5         90               0
+     13                4                  4                1                    4                        0                          5        122               0
+
+Search query 629692
+Customer/search context:
+{'srch_booking_window': 4, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  4                1                    2                        0                          5        249               0
+      2                2                  3                1                    2                        0                          5         84               0
+      3                3                  4                1                    2                        0                          5        159               1
+      4                2                  4                1                    1                        0                          5        137               0
+      5                4                  5                1                    1                        0                          6        165               0
+      6                4                  4                1                    2                        0                          5        154               1
+      7                4                  5                1                    1                        0                          6        215               0
+      8                4                  5                0                    3                        0                          6        329               0
+      9                3                  3                1                    3                        0                          5        152               1
+     10                3                  4                1                    2                        0                          5        159               0
+     11                3                  3                0                    2                        0                          5         89               0
+     12                3                  3                0                    2                        0                          5         91               1
+     13                4                  4                0                    3                        0                          6        415               0
+     14                3                  5                1                    2                        0                          5        208               0
+     15                3                  5                1                    2                        0                          5        127               1
+     16                4                  3                1                    2                        0                          6        210               0
+     17                4                  4                1                    2                        0                          5        239               0
+     18                3                  4                1                    2                        0                          5        101               1
+     19                3                  4                1                    2                        0                          5        149               0
+     20                4                  5                0                    2                        0                          6        239               0
+     21                4                  4                1                    3                        0                          6        318               0
+     22                2                  4                1                    0                        0                          5         90               0
+     23                2                  3                1                    0                        0                          5         84               0
+     24                4                  5                0                    1                        0                          6        724               0
+     25                3                  4                1                    2                        0                          5        189               0
+     26                4                  5                1                    3                        0                          6        199               1
+     27                2                  3                0                    2                        0                          5        100               0
+     28                3                  4                1                    2                        0                          5        109               0
+     29                4                  4                0                    3                        0                          6        247               1
+     30                5                  5                1                    3                        0                          6        409               0
+     31                2                  3                0                    2                        0                          5         69               0
+     32                5                  5                1                    3                        0                          6        288               1
+     33                2                  2                0                    3                        0                          5         72               0
+
+Search query 629746
+Customer/search context:
+{'srch_booking_window': 5, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                5                  4                1                    1                        0                          5        124               0
+      2                3                  3                0                    1                        0                          4         30               0
+      3                5                  5                1                    1                        0                          5        101               0
+      4                3                  2                0                    2                        0                          4         22               0
+      5                4                  3                0                    2                        0                          4         41               0
+      6                4                  4                0                    2                        0                          4         43               0
+      7                4                  3                0                    2                        0                          4         26               1
+
+Search query 636796
+Customer/search context:
+{'srch_booking_window': 2, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  2                1                    2                        0                          4         77               0
+      2                2                  3                1                    2                        0                          4         95               0
+      3                3                  3                1                    1                        0                          5        105               0
+      4                2                  4                1                    1                        0                          5        109               0
+      5                3                  3                0                    1                        0                          5        109               1
+      6                3                  3                1                    2                        0                          5        109               0
+      7                2                  2                1                    2                        0                          5        110               0
+      8                3                  3                1                    2                        0                          4        110               0
+      9                2                  3                1                    1                        0                          5        115               0
+     10                3                  3                1                    1                        0                          5        119               0
+     11                3                  4                1                    2                        0                          5        129               0
+     12                2                  2                0                    1                        0                          4        129               0
+     13                3                  4                0                    1                        0                          5        139               0
+     14                3                  5                1                    2                        0                          5        139               0
+     15                3                  2                1                    1                        0                          4        145               0
+     16                3                  5                1                    2                        0                          5        149               0
+     17                3                  4                1                    0                        0                          5        159               0
+     18                3                  5                1                    2                        0                          5        160               0
+     19                3                  5                1                    1                        0                          5        162               0
+     20                3                  5                1                    2                        0                          5        169               0
+     21                3                  3                1                    1                        0                          5        170               0
+     22                4                  5                1                    2                        0                          5        175               0
+     23                4                  4                1                    0                        0                          5        179               0
+     24                3                  5                1                    2                        0                          5        189               0
+     25                4                  5                1                    2                        0                          5        190               0
+
+Search query 637836
+Customer/search context:
+{'srch_booking_window': 14, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  5                0                    2                        0                          5         98               1
+      2                3                  5                1                    3                        0                          5        149               0
+      3                2                  2                1                    1                        0                          4         47               0
+      4                2                  2                1                    2                        0                          4         57               0
+      5                3                  4                1                    3                        0                          6        225               0
+      6                3                  5                1                    2                        0                          5        139               0
+      7                3                  4                1                    1                        0                          5        179               0
+      8                4                  5                1                    3                        0                          5        134               1
+      9                2                  3                1                    3                        0                          4         51               0
+     10                3                  5                1                    2                        0                          5        119               0
+     11                3                  5                1                    0                        0                          5        113               0
+     12                2                  3                1                    2                        0                          4         51               0
+     13                2                  4                1                    2                        0                          5         90               0
+     14                3                  2                1                    1                        0                          5         85               0
+     15                2                  3                1                    3                        0                          4         59               0
+     16                3                  5                1                    2                        0                          5        103               0
+     17                2                  3                1                    3                        0                          5         85               0
+     18                3                  5                1                    3                        0                          5         99               0
+     19                3                  5                1                    3                        0                          5        135               0
+     20                2                  3                1                    4                        0                          4         52               0
+     21                2                  3                1                    2                        0                          4         60               0
+     22                2                  3                1                    2                        0                          4         78               0
+     23                3                  4                1                    3                        0                          6        171               0
+     24                2                  3                1                    2                        0                          4         64               0
+     25                3                  4                1                    3                        0                          5         80               1
+     26                3                  4                1                    2                        0                          4         79               0
+     27                2                  3                1                    2                        0                          4         75               0
+     28                2                  4                1                    0                        0                          4         55               0
+
+Search query 643219
+Customer/search context:
+{'srch_booking_window': 0, 'srch_adults_count': 1, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  5                0                    1                        0                          0        144               1
+      2                2                  3                1                    3                        0                          0         90               0
+      3                3                  3                1                    3                        0                          0        100               0
+      4                2                  3                1                    0                        0                          0        110               0
+      5                3                  4                1                    1                        0                          0        150               0
+      6                2                  3                1                    2                        0                          0         85               0
+      7                2                  2                0                    3                        0                          0         99               0
+      8                3                  4                0                    1                        0                          0        179               0
+      9                2                  3                1                    2                        0                          0        100               0
+     10                3                  5                1                    3                        0                          0        169               0
+     11                3                  4                0                    3                        0                          0        126               0
+
+Search query 647472
+Customer/search context:
+{'srch_booking_window': 14, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  5                1                    3                        0                          6        155               0
+      2                3                  4                1                    2                        0                          5         95               0
+      3                4                  4                1                    2                        0                          5        116               0
+      4                3                  5                0                    2                        0                          5         73               0
+      5                3                  2                0                    3                        0                          5         74               0
+      6                4                  4                1                    0                        0                          5        191               0
+      7                4                  4                1                    3                        0                          5        126               0
+      8                4                  3                1                    2                        0                          5         95               0
+      9                3                  4                1                    2                        0                          5         95               0
+     10                3                  4                0                    3                        0                          5         75               0
+     11                4                  4                1                    2                        0                          5        108               0
+     12                4                  3                1                    3                        0                          5        119               0
+     13                4                  5                1                    1                        0                          5        155               0
+     14                3                  3                0                    1                        0                          5         69               0
+     15                3                  4                0                    0                        0                          5         75               0
+     16                3                  3                1                    2                        0                          5         62               0
+     17                4                  4                1                    1                        0                          6        231               0
+     18                5                  5                1                    2                        0                          6        183               0
+     19                4                  3                0                    3                        0                          5        148               1
+     20                4                  5                1                    1                        0                          5         99               0
+     21                3                  2                0                    3                        0                          5        105               0
+     22                3                  5                1                    3                        0                          5         84               0
+     23                3                  4                1                    1                        0                          5         96               0
+     24                3                  4                1                    3                        0                          5         75               0
+     25                4                  5                1                    0                        0                          5        145               0
+     26                4                  4                1                    2                        0                          5        102               1
+     27                3                  4                1                    3                        0                          5        137               0
+     28                3                  4                1                    3                        0                          4         81               0
+
+Search query 648287
+Customer/search context:
+{'srch_booking_window': 7, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  4                0                    2                        0                          5        180               0
+      2                2                  3                0                    2                        0                          5        132               0
+      3                3                  5                1                    1                        0                          5        169               0
+      4                3                  3                0                    2                        0                          5        140               1
+      5                3                  4                1                    2                        0                          5        209               0
+      6                3                  5                1                    2                        0                          5        249               0
+      7                4                  4                0                    1                        0                          5        246               1
+      8                3                  4                0                    2                        0                          5        143               1
+      9                4                  4                1                    1                        0                          5        229               0
+     10                4                  4                0                    1                        0                          6        179               0
+     11                4                  5                1                    2                        0                          6        309               0
+     12                3                  5                1                    0                        0                          5        249               0
+
+Search query 650821
+Customer/search context:
+{'srch_booking_window': 0, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                2                  4                0                    1                        0                          5         79               0
+
+Search query 653173
+Customer/search context:
+{'srch_booking_window': 9, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 0}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                4                  5                1                    4                        0                          4         57               0
+      2                5                  5                0                    4                        0                          5        100               0
+      3                4                  5                1                    3                        0                          5        159               0
+      4                4                  5                0                    4                        0                          5         85               0
+      5                4                  5                1                    3                        0                          5        106               0
+      6                3                  3                0                    3                        0                          4         66               0
+      7                4                  5                0                    3                        0                          4         67               0
+      8                4                  3                0                    1                        0                          5         79               0
+      9                2                  5                0                    3                        0                          4         49               0
+     10                2                  5                0                    4                        0                          4         48               0
+     11                3                  5                1                    4                        0                          4         71               0
+     12                4                  5                0                    4                        0                          5         83               0
+     13                2                  5                0                    4                        0                          4         59               0
+     14                2                  5                0                    4                        0                          4         79               0
+     15                4                  3                0                    1                        0                          5         54               0
+     16                4                  4                0                    4                        0                          5         73               0
+     17                3                  3                0                    4                        0                          4         48               0
+     18                3                  3                0                    4                        0                          4         62               0
+     19                5                  5                1                    1                        0                          5        126               0
+     20                3                  4                0                    4                        0                          4         78               0
+     21                2                  2                0                    4                        0                          4         46               0
+
+Search query 653197
+Customer/search context:
+{'srch_booking_window': 19, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  5                1                    1                        0                          5         99               0
+      2                3                  3                0                    0                        1                          5         99               0
+
+Search query 660537
+Customer/search context:
+{'srch_booking_window': 3, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  4                0                    4                        0                          5         69               1
+      2                3                  3                0                    2                        0                          5         74               1
+      3                3                  4                0                    4                        0                          5         87               1
+      4                3                  4                0                    4                        0                          5         88               0
+      5                3                  3                0                    2                        0                          5         89               0
+      6                3                  3                0                    3                        0                          5         89               0
+      7                4                  5                0                    3                        0                          6         94               0
+      8                3                  5                0                    1                        0                          5         97               1
+      9                4                  5                0                    3                        0                          6         99               0
+     10                4                  4                1                    3                        0                          6        112               1
+     11                3                  4                0                    0                        0                          5        114               0
+     12                3                  4                0                    4                        0                          6        119               0
+     13                4                  4                0                    4                        0                          6        119               0
+     14                4                  5                1                    4                        0                          6        120               0
+     15                4                  5                0                    1                        0                          5        125               1
+     16                4                  5                0                    3                        0                          6        129               1
+     17                3                  5                1                    4                        0                          5        139               0
+     18                3                  4                1                    4                        0                          6        139               0
+     19                4                  5                0                    2                        0                          6        139               0
+     20                4                  5                0                    3                        0                          6        148               0
+     21                3                  4                0                    4                        0                          5        150               0
+     22                4                  5                1                    2                        0                          6        151               1
+     23                3                  5                1                    0                        0                          5        159               0
+     24                3                  4                0                    2                        0                          5        159               0
+     25                4                  5                1                    3                        0                          6        179               0
+     26                4                  5                0                    2                        0                          6        209               0
+     27                4                  5                0                    4                        0                          6        229               0
+     28                4                  4                0                    1                        0                          6        239               0
+     29                4                  5                0                    4                        0                          6        359               0
+
+Search query 660701
+Customer/search context:
+{'srch_booking_window': 25, 'srch_adults_count': 2, 'srch_children_count': 0, 'srch_room_count': 1, 'srch_saturday_night_bool': 1}
+
+Hotel options:
+ alt_id  prop_starrating  prop_review_score  prop_brand_bool  prop_location_score  prop_accesibility_score  prop_log_historical_price  price_usd  promotion_flag
+      1                3                  4                1                    4                        0                          5         84               1
+      2                2                  4                1                    4                        0                          5        105               0
+      3                4                  5                0                    3                        0                          5        139               0
+      4                4                  5                0                    3                        0                          5        144               1
+      5                4                  5                0                    3                        0                          5        137               1
+      6                3                  3                0                    1                        0                          5        149               0
+      7                3                  5                0                    4                        0                          5        205               0
+      8                4                  4                0                    3                        0                          5        180               0
+      9                4                  4                0                    4                        0                          5        195               0
+     10                4                  4                0                    4                        0                          5        149               0
+     11                2                  2                0                    3                        0                          5         60               0
+     12                3                  3                0                    4                        0                          5         79               0
+     13                4                  4                0                    3                        0                          6        240               0
+     14                3                  4                1                    4                        0                          5        152               0
+     15                4                  4                0                    3                        0                          5        126               0
+     16                2                  3                0                    4                        0                          4         59               0
