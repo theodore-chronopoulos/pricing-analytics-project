@@ -20,7 +20,11 @@ and pricing.
 │   ├── problem3_pricing.py         #   Problem 3: pricing optimization
 │   ├── problem4_mixture.py         #   Problem 4: early/late MMNL
 │   ├── problem5_assortment.py      #   Problem 5: type-aware/unaware assortment
-│   └── problem_6_mmnl_other.py     #   Problem 6: family/non-family MMNL + Problem 5 repeat
+│   ├── problem6_mmnl.py            #   Problem 6: family/non-family MMNL + Problem 5 repeat
+│   └── problem7_ai_agents.py       #   Problem 7: AI agents as customers (7a + 7b + 7c)
+├── problem7/
+│   ├── explanations.md             #   per-section narrative for 7a/7b/7c/7d
+│   └── inputs/                     #   manual-prompt artefacts (AI sample, predictions, prompt template)
 └── results/                        # JSON outputs produced by the scripts
     ├── problem1_results.json
     ├── problem2_results.json
@@ -28,7 +32,8 @@ and pricing.
     ├── problem4_results.json
     ├── problem5_results.json           # branch-and-bound backend
     ├── problem5_results_gurobi.json    # Gurobi MILP backend (matches BnB)
-    └── problem6_results.json
+    ├── problem6_results.json
+    └── problem7_results.json
 ```
 
 ## What Is Implemented
@@ -40,8 +45,8 @@ and pricing.
 | 3 | Pricing optimization on `data1..4.csv` | `scripts/problem3_pricing.py` | `results/problem3_results.json` |
 | 4 | Early-vs-late mixture of MNL | `scripts/problem4_mixture.py` | `results/problem4_results.json` |
 | 5 | Type-aware and type-unaware assortment (MILP) | `scripts/problem5_assortment.py` | `results/problem5_results*.json` |
-| 6 | Family/non-family MMNL + Problem-5 repeat | `scripts/problem_6_mmnl_other.py` | `results/problem6_results.json` |
-| 7 | AI Agents as Customers | _to be added_ | _to be added_ |
+| 6 | Family/non-family MMNL + Problem-5 repeat | `scripts/problem6_mmnl.py` | `results/problem6_results.json` |
+| 7 | AI Agents as Customers (7a + 7b + 7c) | `scripts/problem7_ai_agents.py` | `results/problem7_results.json` |
 
 ## Setup
 
@@ -59,6 +64,12 @@ For Problem 5 with the explicit MILP backend, `gurobi_cl` (the Gurobi
 command-line optimizer) must be on `PATH`. The branch-and-bound fallback
 in the same script does not need Gurobi.
 
+Problem 7 needs `pandas`, `numpy`, `scipy`, and `statsmodels`:
+
+```bash
+pip install pandas numpy scipy statsmodels
+```
+
 ## How to Run the Code
 
 All commands are run from the repository root.
@@ -71,7 +82,8 @@ python scripts/problem2_assortment.py --problem1-json results/problem1_results.j
 python scripts/problem3_pricing.py    --problem1-json results/problem1_results.json --output-json results/problem3_results.json
 python scripts/problem4_mixture.py    --output-json results/problem4_results.json
 python scripts/problem5_assortment.py --problem4-json results/problem4_results.json --output-json results/problem5_results.json
-python scripts/problem_6_mmnl_other.py --output-json results/problem6_results.json
+python scripts/problem6_mmnl.py --output-json results/problem6_results.json
+python scripts/problem7_ai_agents.py --output-json results/problem7_results.json
 ```
 
 ### Problem 5 with the Gurobi MILP backend
@@ -119,14 +131,22 @@ python scripts/problem5_assortment.py \
     --output-json results/problem5_results_gurobi.json
 
 # Problem 6
-python scripts/problem_6_mmnl_other.py --output-json results/problem6_results.json
+python scripts/problem6_mmnl.py --output-json results/problem6_results.json
+
+# Problem 7 (runs 7a, 7b, 7c sequentially; reads manual artefacts from problem7/inputs/)
+python scripts/problem7_ai_agents.py --output-json results/problem7_results.json
 ```
 
 ## Reproducibility
 
-- All scripts default to seed `5132`. Pass `--seed <int>` to override.
-- The Problem 1–6 code paths are deterministic; the seed is recorded in
-  every JSON output for traceability.
+- Problems 1–6 default to seed `5132`. Pass `--seed <int>` to override.
+- Problem 7 defaults to seed `42` (matching the seed under which the
+  manual AI samples and held-out predictions were collected).
+- The Problem 1–6 code paths are deterministic; the seed is recorded
+  in every JSON output for traceability. Problem 7 is deterministic
+  given the manual AI artefacts in `problem7/inputs/` (the LLM step
+  itself is the only non-deterministic component, and it is performed
+  outside the scripts).
 
 ## Notes on the Reported Numbers
 
@@ -145,9 +165,29 @@ python scripts/problem_6_mmnl_other.py --output-json results/problem6_results.js
 
 ## Problem 7
 
-Problem 7 (AI Agents as Customers) is described conceptually in
-Section 7 of `report.tex`. The implementation script and AI-generated
-outputs are still to be added to this repository.
+Problem 7 (AI Agents as Customers) is implemented in
+`scripts/problem7_ai_agents.py`, which runs the three sub-parts in
+sequence:
+
+- **7a** — converts the manually-collected AI choices in
+  `problem7/inputs/ai_booking_sample500_rows.csv` into a row-per-hotel
+  dataset with a `booking_ai` column,
+- **7b** — fits a ridge-regularized MNL ($\lambda = 1$) on that 500-query
+  AI sample and prints the coefficients next to the Problem 1
+  normalized coefficients,
+- **7c** — uses `np.random.default_rng(42)` to draw 10 in-context
+  examples and 50 held-out queries, builds the held-out prompt
+  (saved to `problem7/inputs/ai_heldout_prompt.txt`), loads the
+  manually-collected AI predictions in
+  `problem7/inputs/ai_heldout_predictions.csv`, and reports
+  exact-choice accuracy with Wilson 95 % CIs against the MNL hard rule
+  and an always-`NO_PURCHASE` baseline, plus a behavioural and
+  probability-implied summary.
+
+The 7d discussion text lives in `problem7/explanations.md`. The full
+LLM prompting step is performed manually in ChatGPT (GPT-5.5 Thinking);
+the prompt template is documented in
+`problem7/inputs/ai_generation_prompt_template.txt`.
 
 ## Building the Report
 

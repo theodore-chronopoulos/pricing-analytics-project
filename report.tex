@@ -740,7 +740,7 @@ with stable log-likelihood across the last four iterations
 We re-run the Problem~5 procedure with $\theta_1, \theta_2$ and the
 per-type weights coming from the family/non-family fit. The unknown-type
 problem is solved by the same exact branch-and-bound code as in Problem~5
-(\texttt{scripts/problem\_6\_mmnl\_other.py}).
+(\texttt{scripts/problem6\_mmnl.py}).
 
 \begin{center}
 \begin{tabular}{lllrrr}
@@ -798,7 +798,7 @@ prefix $\{1,2,7,8,9,11,22\}$ than the blended optimum.
   \centering
   \fbox{\parbox{0.9\linewidth}{\centering
     \vspace{2.5cm}
-    \emph{Screenshot placeholder: terminal output of} \texttt{python scripts/problem\_6\_mmnl\_other.py --output-json results/problem6\_results.json}.
+    \emph{Screenshot placeholder: terminal output of} \texttt{python scripts/problem6\_mmnl.py --output-json results/problem6\_results.json}.
     \vspace{2.5cm}}}
   \caption{Output produced when running the Problem~6 family/non-family script.}
 \end{figure}
@@ -813,50 +813,183 @@ prefix $\{1,2,7,8,9,11,22\}$ than the blended optimum.
 \paragraph{Approach.}
 We take \texttt{data.csv} and remove the booking column, then for each
 search query we present the hotel attributes and customer context to an
-AI agent and ask it to make a single choice (one of the displayed hotels
-or NO\_PURCHASE). The AI-generated choices replace the original booking
-column, and we re-estimate the MNL of Problem~1 on this AI-generated
-dataset. We then use the AI agent as a held-out predictor: it is given a
-small set of labeled context examples and asked to predict booking
-decisions on held-out queries, and its accuracy is compared with the MNL
-estimated in Problem~1.
+AI agent and ask it to make a single choice: either one displayed hotel
+(by \texttt{alt\_id}) or \texttt{NO\_PURCHASE}. The AI-generated choices
+replace the original booking column, and we re-estimate the MNL of
+Problem~1 on the AI-labelled dataset (7a, 7b). We then use the AI agent
+as a held-out predictor: it is given a small set of labelled context
+examples and asked to predict booking decisions on held-out real
+queries, and its accuracy is compared against the MNL estimated in
+Problem~1 and against a trivial baseline (7c).
 
 \paragraph{AI agent and prompt.}
-We use ChatGPT (model: \texttt{<fill in version>}). Each query is sent
-with a prompt that
-\begin{enumerate}[nosep]
-  \item describes the eight hotel attributes in plain language,
-  \item lists the customer context (booking window, adults, children,
-        rooms, Saturday-night flag),
-  \item asks for exactly one choice: a hotel \texttt{row\_id}
-        or \texttt{NO\_PURCHASE},
-  \item requires JSON-formatted output for downstream parsing.
-\end{enumerate}
+We use ChatGPT (GPT-5.5 Thinking). The exact prompt template for each
+sampled query is documented in
+\texttt{problem7/inputs/ai\_generation\_prompt\_template.txt} and asks
+the AI to: (i) consume the customer/search context (booking window,
+adults, children, rooms, Saturday-night flag), (ii) consume the table
+of all hotel alternatives with their eight attributes, and (iii) return
+exactly one choice (an \texttt{alt\_id} or \texttt{NO\_PURCHASE}).
+Because in-chat prompting of all $8\,354$ queries is not feasible, the
+prompt-response loop is performed manually on a random subsample.
 
-\paragraph{Re-estimated MNL on AI-generated bookings.}
-\emph{To be filled in once the AI labelling pass and re-estimation are run:}
-report the AI MNL coefficients, place them next to the human MNL of
-Problem~1 in a side-by-side table, and comment on signs and magnitudes.
+\paragraph{7a --- AI-labelled booking dataset.}
+We sample $500$ search queries (\texttt{numpy} random seed 42), retain
+all alternatives in each sampled choice set ($9\,005$ hotel rows total),
+and prompt the AI once per query. The AI selected a hotel in $402$
+queries and chose \texttt{NO\_PURCHASE} in $98$. The AI's text answer
+is then converted into a binary \texttt{booking\_ai} column on the same
+row-per-hotel layout as \texttt{data.csv}: the chosen \texttt{alt\_id}
+gets $1$, every other alternative in the same query gets $0$, and
+\texttt{NO\_PURCHASE} queries get all-zero rows.
 
-\paragraph{Held-out predictive comparison.}
-\emph{To be filled in:} state the train/test split (queries, not rows),
-report the metric (e.g.\ query-level top-1 accuracy: a prediction is correct
-iff the chosen hotel matches the booked hotel, or
-\texttt{NO\_PURCHASE} is predicted on a no-booking query), and report the
-two numbers (AI accuracy and MNL accuracy) on the same held-out set.
+\paragraph{7b --- Re-estimated MNL on AI-generated bookings.}
+We fit the MNL of Problem~1 on the $500$-query AI sample using the
+\texttt{booking\_ai} column. Because the AI choices are highly
+deterministic, the unregularised MLE is unstable; we therefore
+minimise a ridge-penalised negative log-likelihood
+\[
+\min_\beta\; -\mathcal{L}_{\text{AI}}(\beta) \;+\; \lambda \sum_{i \ge 1} \beta_i^2,
+\qquad \lambda = 1.
+\]
+$\lambda = 1$ is a stabilisation device, not a tuned hyper-parameter.
+On the $500$-query fit the optimiser converges to a penalised NLL of
+$269.05$ (unpenalised NLL $182.29$) in $17$ L-BFGS-B iterations.
+
+The estimated AI coefficients (z-scored features within the AI sample)
+are placed next to the Problem~1 normalised coefficients
+(continuous z-scored on the full $153\,009$ rows, binaries unscaled):
+
+\begin{center}
+\begin{tabular}{lrr}
+\toprule
+Coefficient & AI (ridge, $\lambda=1$) & Human (P1 normalised) \\
+\midrule
+intercept                    & $-3.4938$ & $-1.9815$ \\
+prop\_starrating             & $+3.3437$ & $+0.4081$ \\
+prop\_review\_score          & $+5.4841$ & $+0.1088$ \\
+prop\_brand\_bool            & $+0.7053$ & $+0.2299$ \\
+prop\_location\_score        & $+5.2023$ & $+0.0220$ \\
+prop\_accesibility\_score    & $+0.8096$ & $+0.0434$ \\
+prop\_log\_historical\_price & $-1.3023$ & $-0.0669$ \\
+price\_usd                   & $-3.8477$ & $-1.3311$ \\
+promotion\_flag              & $+0.8907$ & $+0.4540$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+\textbf{Signs match on every feature.} Both models reward higher star
+rating, review score, brand, location, accessibility, and promotion,
+and penalise higher displayed and historical price.
+\textbf{Magnitudes are not directly comparable.} The two columns use
+different scaling conventions (the AI fit z-scores everything on the
+$500$-query AI sample, while Problem~1 leaves binaries unscaled), and
+the AI magnitudes are MAP estimates with a fixed ridge prior. We
+interpret signs and broad relative magnitudes only.
+
+Qualitatively, the AI weights observable quality signals
+(review score, location, star rating) much more strongly than humans
+do, and is also more price-sensitive in standardised units. This is
+consistent with an attribute-driven, rule-like decision process: the
+AI reads off the table of features and produces a near-deterministic
+choice, while real customers respond to many factors not in the prompt
+(photos, brand familiarity, position on the page, trip purpose, etc.).
+
+\paragraph{7c --- Held-out predictive comparison.}
+We split the full dataset at the query level using
+\texttt{numpy.random.default\_rng(42)}: $10$ in-context examples and
+$50$ held-out queries. The held-out prompt (saved by the script to
+\texttt{problem7/inputs/ai\_heldout\_prompt.txt}) is sent to ChatGPT
+manually; the returned predictions are stored as
+\texttt{problem7/inputs/ai\_heldout\_predictions.csv}.
+
+We considered scaling this evaluation to $250$ held-out queries via
+five batches of $50$, but the AI's quality degraded under batched
+prompting (the agent began producing shortcut answers when asked to
+label a long block at once), so we report the cleaner single-prompt
+$50$-query evaluation.
+
+\medskip
+\noindent\textbf{Metric.} \emph{Query-level exact-choice accuracy.}
+A prediction is counted as correct iff it matches the booked hotel's
+\texttt{alt\_id} exactly, or correctly predicts \texttt{NO\_PURCHASE}
+on a no-booking query. The MNL hard rule applies the Problem~1
+normalised coefficients (continuous z-scored using train-set sample
+std, binaries at raw $0$/$1$) and predicts the argmax over hotels and
+the outside option (utility $0$). We also report a trivial
+\emph{always-\texttt{NO\_PURCHASE}} baseline because $26\%$ of
+held-out queries result in no booking, and Wilson $95\%$ confidence
+intervals because $n = 50$ is small.
+
+\begin{center}
+\begin{tabular}{lrcc}
+\toprule
+Model & Accuracy & Correct $/$ N & Wilson 95\% CI \\
+\midrule
+AI agent                       & $0.18$ & $9 / 50$  & $[0.098,\,0.308]$ \\
+MNL hard rule                  & $0.26$ & $13 / 50$ & $[0.159,\,0.396]$ \\
+Always \texttt{NO\_PURCHASE}   & $0.26$ & $13 / 50$ & $[0.159,\,0.396]$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The MNL hard rule \emph{ties} the trivial baseline: it predicts
+\texttt{NO\_PURCHASE} on every one of the $50$ queries because, under
+the correctly-scaled utility computation, no hotel's utility exceeds
+the outside option's $u = 0$. The AI agent underperforms the trivial
+baseline by 4 correct predictions ($18\%$ vs.\ $26\%$). The
+AI--MNL gap of two correct predictions is well within the Wilson CIs
+of either model and should not be read as a real difference.
+
+\medskip
+\noindent\textbf{Probability-implied MNL comparison.}
+Hard-prediction by argmax discards most of an MNL's information.
+We therefore also report the MNL probability-implied summary, where
+each hotel contributes its choice probability:
+
+\begin{center}
+\begin{tabular}{lr}
+\toprule
+Quantity & Value \\
+\midrule
+Observed human purchase rate                       & $0.740$ \\
+AI agent predicted purchase rate                   & $0.820$ \\
+MNL hard-rule predicted purchase rate              & $0.000$ \\
+MNL probability-implied purchase rate              & $0.685$ \\
+\bottomrule
+\end{tabular}
+\end{center}
+
+The probability-implied MNL purchase rate ($0.685$) is the closest
+match to the observed $0.740$. The AI's hard prediction
+($0.820$) overshoots; the MNL hard rule degenerates to no purchase.
+This is the comparison that actually shows signal: the MNL is a
+calibrated probability model and should be evaluated through its
+distribution, not through its argmax.
 
 \paragraph{Discussion.}
-\emph{To be filled in:} summarise how close the AI's choices are to human
-behaviour, both in coefficient signs (alignment of preferences) and in
-held-out predictive accuracy. Note any failure modes (e.g.\ AI never
-choosing the outside option, AI being too deterministic).
+On this dataset, AI agents simulate plausible, directionally reasonable
+hotel preferences --- every coefficient sign in the re-estimated MNL on
+AI bookings matches the human MNL --- but they are noticeably more
+deterministic and more strongly attribute-driven than real customers,
+and they are not better predictors of individual booking decisions
+than a probability-aware MNL. As exact predictors on $50$ held-out
+queries the AI underperforms the trivial \texttt{NO\_PURCHASE}
+baseline; even the MNL hard rule only ties that baseline. The MNL
+becomes informative once we compare its probability distribution to
+observed behaviour, where its implied purchase rate is closest to the
+observed rate. Two caveats apply: the prompt-response loop is
+performed manually so per-query LLM responses are not checked into
+the repo, and the choice of $\lambda = 1$ in 7b is a stabilisation
+device rather than a tuned regulariser, which is why we read 7b's
+coefficient magnitudes only by sign and broad relative size.
 
 \paragraph{Output of the code.}
 \begin{figure}[h!]
   \centering
   \fbox{\parbox{0.9\linewidth}{\centering
     \vspace{2.5cm}
-    \emph{Screenshot placeholder: terminal output of the Problem~7 AI-agent script}.
+    \emph{Screenshot placeholder: terminal output of} \texttt{python scripts/problem7\_ai\_agents.py --output-json results/problem7\_results.json}, showing the 7a/7b/7c summary blocks.
     \vspace{2.5cm}}}
   \caption{Output produced when running the Problem~7 AI-agent script.}
 \end{figure}
@@ -898,8 +1031,8 @@ Problem 3 & \texttt{scripts/problem3\_pricing.py}    & \texttt{results/problem3\
 Problem 4 & \texttt{scripts/problem4\_mixture.py}    & \texttt{results/problem4\_results.json} \\
 Problem 5 & \texttt{scripts/problem5\_assortment.py} & \texttt{results/problem5\_results.json} \\
           &                                          & \texttt{results/problem5\_results\_gurobi.json} \\
-Problem 6 & \texttt{scripts/problem\_6\_mmnl\_other.py} & \texttt{results/problem6\_results.json} \\
-Problem 7 & \emph{(see} \texttt{README.md} \emph{section ``Problem 7'')} & --- \\
+Problem 6 & \texttt{scripts/problem6\_mmnl.py} & \texttt{results/problem6\_results.json} \\
+Problem 7 & \texttt{scripts/problem7\_ai\_agents.py} & \texttt{results/problem7\_results.json} \\
 \bottomrule
 \end{tabular}
 \end{center}

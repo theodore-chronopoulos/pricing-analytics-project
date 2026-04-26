@@ -1,0 +1,168 @@
+{
+  "problem": 7,
+  "seed": 42,
+  "7a": {
+    "ai_sample_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/problem7/inputs/ai_booking_sample500_rows.csv",
+    "merged_csv": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/problem7/inputs/data_with_ai_bookings.csv",
+    "n_total_rows": 153009,
+    "n_total_queries": 8354,
+    "n_sample_queries": 500,
+    "n_sample_rows": 9005,
+    "n_ai_buy_queries": 402,
+    "n_ai_no_purchase_queries": 98
+  },
+  "7b": {
+    "ai_sample_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/problem7/inputs/ai_booking_sample500_rows.csv",
+    "choice_col": "booking_ai_sample500",
+    "lambda": 1.0,
+    "n_queries": 500,
+    "n_rows": 9005,
+    "scaling_used": "z-score on the AI sample (continuous and binary alike)",
+    "scaling_means": {
+      "prop_starrating": 3.1659078289838978,
+      "prop_review_score": 3.9897834536368686,
+      "prop_location_score": 2.624541921154914,
+      "prop_accesibility_score": 0.003886729594669628,
+      "prop_log_historical_price": 4.2866185452526375,
+      "price_usd": 135.3634647418101,
+      "prop_brand_bool": 0.7343697945585785,
+      "promotion_flag": 0.14314269850083286
+    },
+    "scaling_stds": {
+      "prop_starrating": 0.8770567439750754,
+      "prop_review_score": 0.9121240288931383,
+      "prop_location_score": 1.335932357501244,
+      "prop_accesibility_score": 0.062225821946733095,
+      "prop_log_historical_price": 1.780840998456622,
+      "price_usd": 99.90514124847995,
+      "prop_brand_bool": 0.44169272611510124,
+      "promotion_flag": 0.35023775982717026
+    },
+    "ai_regularized_coefficients": {
+      "intercept": -3.493764829078272,
+      "prop_starrating": 3.3436707778676134,
+      "prop_review_score": 5.484113644813311,
+      "prop_location_score": 5.202320205635934,
+      "prop_accesibility_score": 0.809551979370243,
+      "prop_log_historical_price": -1.3022950817593149,
+      "price_usd": -3.8476841996636915,
+      "prop_brand_bool": 0.7052673827878729,
+      "promotion_flag": 0.8906755460795425
+    },
+    "human_normalized_coefficients": {
+      "intercept": -1.9815321907864278,
+      "prop_starrating": 0.4081249536151655,
+      "prop_review_score": 0.10876096623704055,
+      "prop_brand_bool": 0.22992269948768013,
+      "prop_location_score": 0.02202632301274303,
+      "prop_accesibility_score": 0.04344412341249515,
+      "prop_log_historical_price": -0.06686945209512846,
+      "price_usd": -1.3311099651462353,
+      "promotion_flag": 0.45402977040295234
+    },
+    "fit": {
+      "converged": true,
+      "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+      "iterations": 17,
+      "penalized_nll": 269.05161166541995,
+      "unpenalized_nll": 182.28511380623172
+    }
+  },
+  "7c": {
+    "data_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data.csv",
+    "ai_predictions_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/problem7/inputs/ai_heldout_predictions.csv",
+    "prompt_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/problem7/inputs/ai_heldout_prompt.txt",
+    "seed": 42,
+    "n_context": 10,
+    "n_heldout": 50,
+    "scaling_convention": "Continuous features z-scored using train-set sample std; binary features (prop_brand_bool, promotion_flag) left at raw 0/1, matching Problem 1's normalized-coefficient convention.",
+    "accuracy_table": [
+      {
+        "model": "AI agent",
+        "accuracy": 0.18,
+        "correct": 9,
+        "n": 50,
+        "wilson_95_ci": [
+          0.09770192670234175,
+          0.30796053674300783
+        ]
+      },
+      {
+        "model": "MNL hard rule",
+        "accuracy": 0.26,
+        "correct": 13,
+        "n": 50,
+        "wilson_95_ci": [
+          0.15871527493552381,
+          0.39553157264848826
+        ]
+      },
+      {
+        "model": "Always NO_PURCHASE baseline",
+        "accuracy": 0.26,
+        "correct": 13,
+        "n": 50,
+        "wilson_95_ci": [
+          0.15871527493552381,
+          0.39553157264848826
+        ]
+      }
+    ],
+    "behaviour_summary": [
+      {
+        "model": "AI agent",
+        "purchase_rate": 0.82,
+        "num_predicted_purchases": 41,
+        "avg_chosen_price": 136.82926829268294,
+        "avg_chosen_star_rating": 3.707317073170732,
+        "avg_chosen_review_score": 4.926829268292683,
+        "avg_chosen_location_score": 3.0,
+        "share_chosen_brand": 0.9024390243902439,
+        "share_chosen_promotion": 0.3170731707317073
+      },
+      {
+        "model": "Always NO_PURCHASE baseline",
+        "purchase_rate": 0.0,
+        "num_predicted_purchases": 0,
+        "avg_chosen_price": NaN,
+        "avg_chosen_star_rating": NaN,
+        "avg_chosen_review_score": NaN,
+        "avg_chosen_location_score": NaN,
+        "share_chosen_brand": NaN,
+        "share_chosen_promotion": NaN
+      },
+      {
+        "model": "MNL hard-choice",
+        "purchase_rate": 0.0,
+        "num_predicted_purchases": 0,
+        "avg_chosen_price": NaN,
+        "avg_chosen_star_rating": NaN,
+        "avg_chosen_review_score": NaN,
+        "avg_chosen_location_score": NaN,
+        "share_chosen_brand": NaN,
+        "share_chosen_promotion": NaN
+      },
+      {
+        "model": "Observed human data",
+        "purchase_rate": 0.74,
+        "num_predicted_purchases": 37,
+        "avg_chosen_price": 115.08108108108108,
+        "avg_chosen_star_rating": 3.2432432432432434,
+        "avg_chosen_review_score": 4.135135135135135,
+        "avg_chosen_location_score": 2.5945945945945947,
+        "share_chosen_brand": 0.7837837837837838,
+        "share_chosen_promotion": 0.24324324324324326
+      }
+    ],
+    "mnl_probability_implied": {
+      "model": "MNL probability-implied",
+      "purchase_rate": 0.6849091043758428,
+      "avg_chosen_price": 124.55044806166563,
+      "avg_chosen_star_rating": 3.200548736898628,
+      "avg_chosen_review_score": 3.9886010512812513,
+      "avg_chosen_location_score": 2.353204105406934,
+      "share_chosen_brand": 0.7648376655296545,
+      "share_chosen_promotion": 0.1908324179647966
+    }
+  }
+}
