@@ -1,0 +1,12 @@
+{
+  "problem": "7a",
+  "data_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/data.csv",
+  "decisions_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/problem7/inputs/ai_booking_sample500_rows.csv",
+  "output_csv": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/problem7/inputs/data_with_ai_bookings.csv",
+  "n_total_rows": 153009,
+  "n_total_queries": 8354,
+  "n_sample_queries": 500,
+  "n_sample_rows": 9005,
+  "n_ai_buy_queries": 402,
+  "n_ai_no_purchase_queries": 98
+}

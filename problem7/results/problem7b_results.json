@@ -1,0 +1,48 @@
+{
+  "problem": "7b",
+  "ai_sample_path": "/Users/theodorechronopoulos/Desktop/Cornell Courses/PricingAnalytics/Project/problem7/inputs/ai_booking_sample500_rows.csv",
+  "choice_col": "booking_ai_sample500",
+  "lambda": 1.0,
+  "n_queries": 500,
+  "n_rows": 9005,
+  "scaling_used": "z-score on the AI sample (continuous and binary alike)",
+  "scaling_means": {
+    "prop_starrating": 3.1659078289838978,
+    "prop_review_score": 3.9897834536368686,
+    "prop_brand_bool": 0.7343697945585785,
+    "prop_location_score": 2.624541921154914,
+    "prop_accesibility_score": 0.003886729594669628,
+    "prop_log_historical_price": 4.2866185452526375,
+    "price_usd": 135.3634647418101,
+    "promotion_flag": 0.14314269850083286
+  },
+  "scaling_stds": {
+    "prop_starrating": 0.8770567439750754,
+    "prop_review_score": 0.9121240288931383,
+    "prop_brand_bool": 0.44169272611510124,
+    "prop_location_score": 1.335932357501244,
+    "prop_accesibility_score": 0.062225821946733095,
+    "prop_log_historical_price": 1.780840998456622,
+    "price_usd": 99.90514124847995,
+    "promotion_flag": 0.35023775982717026
+  },
+  "ai_regularized_coefficients": {
+    "intercept": -3.4937653984105927,
+    "prop_starrating": 3.3436694492714194,
+    "prop_review_score": 5.484114303140219,
+    "prop_brand_bool": 0.7052669985731633,
+    "prop_location_score": 5.202320252566371,
+    "prop_accesibility_score": 0.8095528834868729,
+    "prop_log_historical_price": -1.3022947413539965,
+    "price_usd": -3.8476821023773575,
+    "promotion_flag": 0.8906755605805544
+  },
+  "fit": {
+    "converged": true,
+    "message": "CONVERGENCE: RELATIVE REDUCTION OF F <= FACTR*EPSMCH",
+    "iterations": 17,
+    "penalized_nll": 269.0516116690773,
+    "unpenalized_nll": 182.28513106394982
+  },
+  "interpretation_note": "Magnitudes are not directly comparable to the Problem 1 normalized coefficients because (i) lambda=1 is a stabilization device, not a tuned regularizer, and (ii) the AI fit z-scores all features on the AI sample whereas Problem 1 left binary features unscaled. Compare signs and broad relative magnitudes only."
+}
